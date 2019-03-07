@@ -4,8 +4,10 @@
 
 class Camera {
 public:
-  Vector *position, *angle;
+  Vector *position, *angle, *forwardDirection, *rightDirection;
   double cosY, sinY, cosX, sinX;
   Camera(Vector *p);
+  void getMovements(bool keyboard[256]);
+  void update();
 };
 #endif

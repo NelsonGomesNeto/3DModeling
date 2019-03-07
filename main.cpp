@@ -15,25 +15,14 @@ Camera *camera;
 const double pi = acos(-1);
 double radToDeg(double a) { return(a * 180 / pi); }
 
-void keyboardHandler(unsigned char key, int x, int y)
-{
-  switch (key)
-  {
-    case 'w': camera->position->z += camera->cosY; camera->position->x -= camera->sinY; break;
-    case 's': camera->position->z -= camera->cosY; camera->position->x += camera->sinY; break;
-    case 'a': camera->position->x += camera->cosY; camera->position->z += camera->sinY; break;
-    case 'd': camera->position->x -= camera->cosY; camera->position->z -= camera->sinY; break;
-    case 'q': camera->angle->y -= 0.1; camera->sinY = sin(camera->angle->y), camera->cosY = cos(camera->angle->y); break;
-    case 'e': camera->angle->y += 0.1; camera->sinY = sin(camera->angle->y), camera->cosY = cos(camera->angle->y); break;
-    case 'f': camera->angle->x += 0.1; camera->sinX = sin(camera->angle->x), camera->cosX = cos(camera->angle->x); break;
-    case 'r': camera->angle->x -= 0.1; camera->sinX = sin(camera->angle->x), camera->cosX = cos(camera->angle->x); break;
-    default: break;
-  }
-  camera->position->print();
-}
+bool keyboard[256];
+void keyboardUpHandler(unsigned char key, int x, int y) { keyboard[key] = false; }
+void keyboardHandler(unsigned char key, int x, int y) { keyboard[key] = true; }
 
 void update(int value) {
   glutTimerFunc(10, update, 1);
+  camera->getMovements(keyboard);
+  camera->update();
   glutPostRedisplay();
 }
 
@@ -41,11 +30,16 @@ void display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glPushMatrix();
-    glRotated(radToDeg(camera->angle->x), 1, 0, 0);
-    glRotated(radToDeg(camera->angle->y), 0, 1, 0);
+    // glRotated(radToDeg(camera->angle->x), 1, 0, 0);
+    // glRotated(radToDeg(camera->angle->y), 0, 1, 0);
     gluLookAt(camera->position->x, camera->position->y, camera->position->z,
-              camera->position->x, camera->position->y, camera->position->z + 100,
+              camera->position->x + camera->forwardDirection->x*10, camera->position->y + camera->forwardDirection->y*10, camera->position->z + camera->forwardDirection->z*10,
               0, 1, 0);
+    glColor3ub(0, 0, 255);
+    glPushMatrix();
+    glTranslated(camera->position->x + camera->forwardDirection->x*10, camera->position->y + camera->forwardDirection->y*10, camera->position->z + camera->forwardDirection->z*10);
+    glutSolidSphere(0.5, 10, 10);
+    glPopMatrix();
 
     glColor3ub(255, 255, 255);
     glBegin(GL_LINES);
@@ -98,5 +92,6 @@ int main(int argc, char **argv) {
   // glutReshapeFunc(reshape);
   glutTimerFunc(10, update, 1);
   glutKeyboardFunc(keyboardHandler);
+  glutKeyboardUpFunc(keyboardUpHandler);
   glutMainLoop();
 }
