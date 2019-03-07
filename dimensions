@@ -1,0 +1,4 @@
+rule (20m) = 25
+width = 12 + 20 + 12
+depth = 20 + 14 + 21
+height = ??
