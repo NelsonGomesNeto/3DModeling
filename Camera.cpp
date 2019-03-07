@@ -15,12 +15,10 @@ void Camera::getMovements(bool keyboard[256]) {
   if (keyboard['a']) *position += *rightDirection;
   if (keyboard['d']) *position -= *rightDirection;
 
-  double day = 0, dax = 0;
-  if (keyboard['q']) day -= 0.02;
-  if (keyboard['e']) day += 0.02;
-  if (keyboard['r']) dax -= 0.02;
-  if (keyboard['f']) dax += 0.02;
-  angle->x += dax, angle->y += day;
+  if (keyboard['q']) angle->y -= 0.02;
+  if (keyboard['e']) angle->y += 0.02;
+  if (keyboard['r']) angle->x -= 0.02;
+  if (keyboard['f']) angle->x += 0.02;
 }
 
 void Camera::update() {

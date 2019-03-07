@@ -56,17 +56,14 @@ void display() {
 }
 
 void reshape(int width, int height) {
-  height = max(1, height);
-  screenWidth = width, screenHeight = height;
+  screenWidth = width, screenHeight = max(1, height);
   
   glViewport(0, 0, screenWidth, screenHeight);
   glMatrixMode(GL_PROJECTION);
-  gluPerspective(60, (double) screenWidth / screenHeight, 0.1, 100);
+  glLoadIdentity();
+  gluPerspective(65, (double) screenWidth / screenHeight, 0.1, 300);
 
   glMatrixMode(GL_MODELVIEW);
-  // gluLookAt(camera->position->x, camera->position->y, camera->position->z,
-  //           camera->position->x, camera->position->y - 40, camera->position->z,
-  //           0, 1, 0);
 }
 
 void init() {
@@ -89,7 +86,7 @@ int main(int argc, char **argv) {
     glutCreateWindow("3DModeling");
     init();
   glutDisplayFunc(display);
-  // glutReshapeFunc(reshape);
+  glutReshapeFunc(reshape);
   glutTimerFunc(10, update, 1);
   glutKeyboardFunc(keyboardHandler);
   glutKeyboardUpFunc(keyboardUpHandler);
