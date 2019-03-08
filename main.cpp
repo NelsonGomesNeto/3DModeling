@@ -21,15 +21,17 @@ void keyboardHandler(unsigned char key, int x, int y) { keyboard[key] = true; }
 
 Vector *mouse; int mouseWidthLimit = 5, mouseHeightLimit = 5;
 void passiveMotionHandler(int x, int y) {
-  mouse->x -= (x - screenWidthDiv2) / 10.0, mouse->y -= (y - screenHeightDiv2) / 10.0;
+  mouse->x -= (screenWidthDiv2 - x) / 10.0, mouse->y -= (screenHeightDiv2 - y) / 10.0; // diff / x (angular acceleration), where x smoothes the increase of angular speed
   if (mouse->x < -mouseWidthLimit) mouse->x = -mouseWidthLimit; else if (mouse->x > mouseWidthLimit) mouse->x = mouseWidthLimit;
   if (mouse->y < -mouseHeightLimit) mouse->y = -mouseHeightLimit; else if (mouse->y > mouseHeightLimit) mouse->y = mouseHeightLimit;
+  keyboard['q'] = mouse->x > 0, keyboard['e'] = mouse->x < -0, // enables rotation on y axis
+  keyboard['r'] = mouse->y > 0, keyboard['f'] = mouse->y < -0; // enables rotation on x axis
   glutWarpPointer(screenWidthDiv2, screenHeightDiv2);
 }
 
 void update(int value) {
   glutTimerFunc(10, update, 1);
-  camera->getMovements(keyboard);
+  camera->getMovements(keyboard, mouse);
   camera->update();
   glutPostRedisplay();
 }
@@ -53,14 +55,12 @@ void display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glPushMatrix();
-    // glRotated(radToDeg(camera->angle->x), 1, 0, 0);
-    // glRotated(radToDeg(camera->angle->y), 0, 1, 0);
     gluLookAt(camera->position->x, camera->position->y, camera->position->z,
-              camera->position->x + camera->forwardDirection->x*10, camera->position->y + camera->forwardDirection->y*10, camera->position->z + camera->forwardDirection->z*10,
+              camera->position->x + camera->forwardDirection->x*100, camera->position->y + camera->forwardDirection->y*100, camera->position->z + camera->forwardDirection->z*100,
               0, 1, 0);
     glColor3ub(0, 0, 255);
     glPushMatrix();
-    glTranslated(mouse->x + camera->forwardDirection->x*10, mouse->y + camera->forwardDirection->y*10, camera->position->z + camera->forwardDirection->z*10);
+    glTranslated(camera->position->x + camera->forwardDirection->x*100, camera->position->y + camera->forwardDirection->y*100, camera->position->z + camera->forwardDirection->z*100);
     glutSolidSphere(0.5, 10, 10);
     glPopMatrix();
 
@@ -93,7 +93,7 @@ void init() {
 }
 
 int main(int argc, char **argv) {
-  camera = new Camera(new Vector(0, 0, 0));
+  camera = new Camera(new Vector(0, 1, 0));
   mouse = new Vector(0, 0, 0);
 
   glutInit(&argc, argv);

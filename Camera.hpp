@@ -5,9 +5,9 @@
 class Camera {
 public:
   Vector *position, *angle, *forwardDirection, *rightDirection;
-  double cosY, sinY, cosX, sinX;
+  double maxSpeed;
   Camera(Vector *p);
-  void getMovements(bool keyboard[256]);
+  void getMovements(bool keyboard[256], Vector *mouse);
   void update();
 };
 #endif
