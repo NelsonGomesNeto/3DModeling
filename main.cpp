@@ -37,18 +37,33 @@ void update(int value) {
 }
 
 void drawGrid() {
+  glDisable(GL_LIGHTING);
   glBegin(GL_LINES);
     for (int i = -20; i <= 20; i ++) {
-      glColor3ub( 20,  20, 255); glVertex3d(-20, 0, i); glVertex3d(20, 0, i); // x axis
-      glColor3ub(255,   0,   0); glVertex3d(i, 0, -20); glVertex3d(i, 0, 20); // z axis
+      glColor3ub(  0, 100, 155); glVertex3d(-20, 0, i); glVertex3d(20, 0, i); // x axis
+      glColor3ub(100,   0,   0); glVertex3d(i, 0, -20); glVertex3d(i, 0, 20); // z axis
     }
-    // for (int i = -10; i <= 10; i ++)
-    //   for (int j = -10; j <= 10; j ++) {
-    //     glVertex3d(-10, i, j); glVertex3d(10, i, j); // yz lines
-    //     glVertex3d(i, -10, j); glVertex3d(i, 10, j); // xz lines
-    //     glVertex3d(i, j, -10); glVertex3d(i, j, 10); // xy lines
-    //   }
   glEnd();
+  glEnable(GL_LIGHTING);
+  for (int i = -20; i <= 20; i ++)
+    for (int j = -20; j <= 20; j ++) {
+      glPushMatrix();
+        glTranslated(i, 0, j);
+        glColor3ub(255, 255, 255); glutSolidSphere(0.1, 10, 10);
+      glPopMatrix();
+    }
+}
+
+void lightsSetup() {
+  GLfloat specularReflection[] = {1, 1, 1, 1};
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specularReflection); // Defines objects reflection to specular light
+  glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1); // Defines objects level of reflection (0 to 128)
+  GLfloat lightAmbient[] = {1, 0, 0, 1}; glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
+  GLfloat lightDiffuse[] = {1, 0, 0, 1}; glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
+  GLfloat lightSpecular[] = {0, 0, 1, 1}; glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular);
+  GLfloat lightSpotCutoff = 10 + mouse->z; glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, lightSpotCutoff);
+  GLfloat lightPosition[] = {camera->position->x, camera->position->y, camera->position->z, 1}; glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+  GLfloat lightSpotDirection[] = {camera->forwardDirection->x, camera->forwardDirection->y, camera->forwardDirection->z}; glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightSpotDirection);
 }
 
 void display() {
@@ -58,10 +73,12 @@ void display() {
     gluLookAt(camera->position->x, camera->position->y, camera->position->z,
               camera->position->x + camera->forwardDirection->x*100, camera->position->y + camera->forwardDirection->y*100, camera->position->z + camera->forwardDirection->z*100,
               0, 1, 0);
-    glColor3ub(0, 0, 255);
+    lightsSetup();
+
+    glColor3ub(255, 255, 255);
     glPushMatrix();
-    glTranslated(camera->position->x + camera->forwardDirection->x*100, camera->position->y + camera->forwardDirection->y*100, camera->position->z + camera->forwardDirection->z*100);
-    glutSolidSphere(0.5, 10, 10);
+      glTranslated(camera->position->x + camera->forwardDirection->x*100, camera->position->y + camera->forwardDirection->y*100, camera->position->z + camera->forwardDirection->z*100);
+      glutSolidSphere(0.1, 10, 10);
     glPopMatrix();
 
     drawGrid();
@@ -85,6 +102,11 @@ void reshape(int width, int height) {
 
 void init() {
   glEnable(GL_DEPTH_TEST);
+
+  glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT0);
+  glEnable(GL_COLOR_MATERIAL);
+  glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 
   glMatrixMode(GL_PROJECTION);
   gluPerspective(65, (double) screenWidth / screenHeight, 0.1, 300);

@@ -20,6 +20,10 @@ void Camera::getMovements(bool keyboard[256], Vector *mouse) {
   if (keyboard['r']) { angle->x += mouse->y / 50.0, mouse->y /= 1.2; }
   if (keyboard['f']) { angle->x += mouse->y / 50.0, mouse->y /= 1.2; }
   // angle += mouse / sensitivity, mouse /= desacceleration
+
+  if (keyboard['p']) mouse->z += 0.1;
+  if (keyboard['P']) mouse->z -= 0.1;
+  printf("%lf\n", mouse->z);
 }
 
 void Camera::update() {
