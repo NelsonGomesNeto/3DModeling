@@ -9,11 +9,27 @@ Camera::Camera(Vector *p) {
   maxSpeed = 0.1;
 }
 
+Camera::Camera(Vector *p, Floor *pFloor) {
+  // TODO: COLLISION :)
+  position = p;
+  angle = new Vector(0, 0, 0);
+  forwardDirection = new Vector(0, 0, 0.1), rightDirection = new Vector(0.1, 0, 0);
+  maxSpeed = 0.1;
+  this->pFloor = pFloor;
+}
+
 void Camera::getMovements(bool keyboard[256], Vector *mouse) {
-  if (keyboard['w']) *position += *forwardDirection;
-  if (keyboard['s']) *position -= *forwardDirection;
-  if (keyboard['a']) *position += *rightDirection;
-  if (keyboard['d']) *position -= *rightDirection;
+  // cancel camera step if intended next position is out of bounds. Out of bounds means there's no floor polygon below camera.
+  Vector* intended = position->copy();
+
+  if (keyboard['w']) *intended += *forwardDirection;
+  if (keyboard['s']) *intended -= *forwardDirection;
+  if (keyboard['a']) *intended += *rightDirection;
+  if (keyboard['d']) *intended -= *rightDirection;
+
+  Vector* newPos = pFloor->checkHitBoxes(intended);
+
+  position = newPos;
 
   if (keyboard['q']) { angle->y += mouse->x / 50.0, mouse->x /= 1.2; }
   if (keyboard['e']) { angle->y += mouse->x / 50.0, mouse->x /= 1.2; }

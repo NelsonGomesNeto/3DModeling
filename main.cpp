@@ -8,10 +8,13 @@
 #include <math.h>
 #include "Camera.hpp"
 #include "Vector.hpp"
+#include "Floor.hpp"
 #include <GL/freeglut.h>
 using namespace std;
 int screenWidth = 800, screenWidthDiv2 = 400, screenHeight = 800, screenHeightDiv2 = 400;
+bool FLOOR_DEBUG = true;
 Camera *camera;
+Floor* floors;
 const double pi = acos(-1);
 double radToDeg(double a) { return(a * 180 / pi); }
 
@@ -65,6 +68,8 @@ void display() {
     glPopMatrix();
 
     drawGrid();
+    if (FLOOR_DEBUG)
+      floors->drawFloorPolygons();
     glColor3ub(255, 255, 255); glutSolidSphere(0.5, 10, 10);
   glPopMatrix();
 
@@ -93,7 +98,9 @@ void init() {
 }
 
 int main(int argc, char **argv) {
-  camera = new Camera(new Vector(0, 1, 0));
+  floors = new Floor();
+  floors->buildFloor();
+  camera = new Camera(new Vector(0, 1, 0), floors);
   mouse = new Vector(0, 0, 0);
 
   glutInit(&argc, argv);

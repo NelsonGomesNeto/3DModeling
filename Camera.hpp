@@ -1,13 +1,18 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 #include "Vector.hpp"
+#include "Floor.hpp"
 
 class Camera {
 public:
-  Vector *position, *angle, *forwardDirection, *rightDirection;
+    Camera(Vector *pVector, Floor *pFloor);
+
+    Vector *position, *angle, *forwardDirection, *rightDirection;
   double maxSpeed;
-  Camera(Vector *p);
+  explicit Camera(Vector *p);
   void getMovements(bool keyboard[256], Vector *mouse);
   void update();
+
+    Floor *pFloor;
 };
 #endif
