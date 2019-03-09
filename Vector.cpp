@@ -2,44 +2,36 @@
 #include <stdio.h>
 #include <math.h>
 
-Vector::Vector(double xx, double yy, double zz) {
-  x = xx, y = yy, z = zz;
+Vector::Vector(double x, double y, double z) {
+  this->x = x, this->y = y, this->z = z;
 }
 
-void Vector::set(double xx, double yy, double zz) {
-  x = xx, y = yy, z = zz;
+void Vector::set(double x, double y, double z) {
+  this->x = x, this->y = y, this->z = z;
 }
 
-Vector* Vector::limit(int max) {
+Vector* Vector::limit(double max) {
   double ms = magSquared();
-  if (ms > pow(max, 2)) {
-    div(sqrt(ms));
-    mult(max);
-  }
+  if (ms > max*max) this->mult(max / sqrt(ms));
   return this;
 }
 
 Vector* Vector::div(double n) {
-  x /= n;
-  y /= n;
-  z /= n;
+  this->x /= n, this->y /= n, this->z /= n;
   return this;
 }
 
 Vector* Vector::mult(double n) {
-  x *= n;
-  y *= n;
-  z *= n;
+  this->x *= n, this->y *= n, this->z *= n;
   return this;
 }
 
 double Vector::magSquared() {
-  return x * x + y * y + z * z;
+  return this->x * this->x + this->y * this->y + this->z * this->z;
 }
 
 void Vector::print() {
-  printf("(%8.3lf,%8.3lf,%8.3lf), mag = %8.3lf\n", x, y, z, sqrt(x*x + y*y + z*z));
-
+  printf("(%8.3lf,%8.3lf,%8.3lf), mag = %8.3lf\n", this->x, this->y, this->z, sqrt(this->magSquared()));
 }
 
 void Vector::rotateX(double angle) {
@@ -48,9 +40,9 @@ void Vector::rotateX(double angle) {
     0  c -s . y
     0  s  c   z
   */
-  double c = cos(angle), s = sin(angle), yy = y, zz = z;
-  y =  c*yy + -s*zz;
-  z =  s*yy +  c*zz;
+  double c = cos(angle), s = sin(angle), yy = this->y, zz = this->z;
+  this->y =  c*yy + -s*zz,
+  this->z =  s*yy +  c*zz;
 }
 void Vector::rotateY(double angle) {
   /*
@@ -58,9 +50,9 @@ void Vector::rotateY(double angle) {
     0  1  0 . y
    -s  0  c   z
   */
-  double c = cos(angle), s = sin(angle), xx = x, zz = z;
-  x =  c*xx +  s*zz;
-  z = -s*xx +  c*zz;
+  double c = cos(angle), s = sin(angle), xx = this->x, zz = this->z;
+  this->x =  c*xx +  s*zz,
+  this->z = -s*xx +  c*zz;
 }
 
 void Vector::operator+=(const Vector &a) {
@@ -84,10 +76,9 @@ Vector *Vector::copy() {
 }
 
 Vector *Vector::cross(Vector *pVector) {
-  return new Vector(this->y * pVector->z - pVector->y * this->z, pVector->x * this->z - this->x * pVector->z, this->x * pVector->y - pVector->x * this->y);
+  return new Vector(this->y * pVector->z - this->z * pVector->y, this->z * pVector->x - this->x * pVector->z, this->x * pVector->y - this->y * pVector->x);
 }
 
-Vector *Vector::unit() {
-  div(sqrt(magSquared()));
-  return this;
+Vector *Vector::normalize() {
+  return this->div(sqrt(this->magSquared()));
 }

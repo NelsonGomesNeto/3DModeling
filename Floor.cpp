@@ -12,33 +12,33 @@ void Floor::addFloorPolygon(Polygon *polygon) {
 }
 
 void Floor::drawFloorPolygons() {
-  for (auto p: this->floorPolygons) {
+  for (Polygon *p: this->floorPolygons) {
     p->draw();
   }
 }
 
 void Floor::buildFloor() {
   vector<Vector*> v;
-  v.push_back(new Vector(-10, 0, -10));
-  v.push_back(new Vector(10, 0, -10));
-  v.push_back(new Vector(10, 0, 10));
-  v.push_back(new Vector(-10, 0, 10));
-  Polygon* p = new Polygon(v);
-  addFloorPolygon(p);
+  v.push_back(new Vector(-20, 0, 20));
+  v.push_back(new Vector(20, 0, 20));
+  v.push_back(new Vector(20, 0, -20));
+  v.push_back(new Vector(-20, 0, -20));
+  Polygon *p = new Polygon(v);
+  this->addFloorPolygon(p);
   v.clear();
   v.push_back(new Vector(10, 0, 10));
   v.push_back(new Vector(10, 5, 15));
   v.push_back(new Vector(5, 5, 15));
   v.push_back(new Vector(5, 0, 10));
-  addFloorPolygon(new Polygon(v));
+  this->addFloorPolygon(new Polygon(v));
 }
 
-Vector *Floor::checkHitBoxes(Vector *pVector) {
+Vector* Floor::checkHitBoxes(Vector *pVector) {
   bool overPolygon = false;
-  for (auto p: this->floorPolygons) {
-    if (p->handleCollision(pVector))
+  for (Polygon *p: this->floorPolygons)
+    if (p->handleCollision(pVector)) {
       overPolygon = true;
-  }
+    }
   if (!overPolygon)
     printf("out of bounds\n");
   return pVector;

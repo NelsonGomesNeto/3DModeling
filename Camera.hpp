@@ -5,14 +5,15 @@
 
 class Camera {
 public:
-    Camera(Vector *pVector, Floor *pFloor);
+  Camera(Vector *pVector, Floor *pFloor);
 
-    Vector *position, *angle, *forwardDirection, *rightDirection;
+  Vector *position, *angle, *forwardDirection, *rightDirection, *eyeDirection;
   double maxSpeed;
   explicit Camera(Vector *p);
   void getMovements(bool keyboard[256], Vector *mouse);
   void update();
 
-    Floor *pFloor;
+  Floor *pFloor;
 };
+
 #endif

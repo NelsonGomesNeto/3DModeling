@@ -3,39 +3,24 @@
 
 class Vector {
 public:
-    double x, y, z;
+  double x, y, z;
 
-    Vector(double xx, double yy, double zz);
-
-    void set(double xx, double yy, double zz);
-
-    double magSquared();
-
-    Vector* limit(int max);
-
-    Vector* mult(double n);
-
-    Vector* div(double n);
-
-    void print();
-
-    void rotateX(double angle);
-
-    void rotateY(double angle);
-
-    void operator+=(const Vector &a);
-
-    void operator-=(const Vector &a);
-
-    Vector* operator-(const Vector &a);
-
-    Vector* operator+(const Vector &a);
-
-    Vector *copy();
-
-    Vector *cross(Vector *pVector);
-
-    Vector *unit();
+  Vector(double x, double y, double z);
+  void set(double x, double y, double z);
+  double magSquared();
+  Vector* limit(double max);
+  Vector* mult(double n);
+  Vector* div(double n);
+  void print();
+  void rotateX(double angle);
+  void rotateY(double angle);
+  void operator+=(const Vector &a);
+  void operator-=(const Vector &a);
+  Vector* operator-(const Vector &a);
+  Vector* operator+(const Vector &a);
+  Vector *copy();
+  Vector *cross(Vector *pVector);
+  Vector *normalize();
 };
 
 #endif

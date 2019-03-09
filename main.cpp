@@ -24,7 +24,7 @@ void keyboardHandler(unsigned char key, int x, int y) { keyboard[key] = true; }
 
 Vector *mouse; int mouseWidthLimit = 5, mouseHeightLimit = 5;
 void passiveMotionHandler(int x, int y) {
-  mouse->x -= (screenWidthDiv2 - x) / 10.0, mouse->y -= (screenHeightDiv2 - y) / 10.0; // diff / x (angular acceleration), where x smoothes the increase of angular speed
+  mouse->x += (screenWidthDiv2 - x) / 10.0, mouse->y += (y - screenHeightDiv2) / 10.0; // diff / x (angular acceleration), where x smoothes the increase of angular speed
   if (mouse->x < -mouseWidthLimit) mouse->x = -mouseWidthLimit; else if (mouse->x > mouseWidthLimit) mouse->x = mouseWidthLimit;
   if (mouse->y < -mouseHeightLimit) mouse->y = -mouseHeightLimit; else if (mouse->y > mouseHeightLimit) mouse->y = mouseHeightLimit;
   keyboard['q'] = mouse->x > 0, keyboard['e'] = mouse->x < -0, // enables rotation on y axis
@@ -65,8 +65,8 @@ void lightsSetup() {
   GLfloat lightDiffuse[] = {1, 0, 0, 1}; glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
   GLfloat lightSpecular[] = {0, 0, 1, 1}; glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular);
   GLfloat lightSpotCutoff = 10 + mouse->z; glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, lightSpotCutoff);
-  GLfloat lightPosition[] = {camera->position->x, camera->position->y, camera->position->z, 1}; glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-  GLfloat lightSpotDirection[] = {camera->forwardDirection->x, camera->forwardDirection->y, camera->forwardDirection->z}; glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightSpotDirection);
+  GLfloat lightPosition[] = {(GLfloat) camera->position->x, (GLfloat) camera->position->y, (GLfloat) camera->position->z, 1}; glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+  GLfloat lightSpotDirection[] = {(GLfloat) camera->eyeDirection->x, (GLfloat) camera->eyeDirection->y, (GLfloat) camera->eyeDirection->z}; glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightSpotDirection);
 }
 
 void display() {
@@ -74,13 +74,13 @@ void display() {
 
   glPushMatrix();
     gluLookAt(camera->position->x, camera->position->y, camera->position->z,
-              camera->position->x + camera->forwardDirection->x*100, camera->position->y + camera->forwardDirection->y*100, camera->position->z + camera->forwardDirection->z*100,
+              camera->position->x + camera->eyeDirection->x*100, camera->position->y + camera->eyeDirection->y*100, camera->position->z + camera->eyeDirection->z*100,
               0, 1, 0);
     lightsSetup();
 
     glColor3ub(255, 255, 255);
     glPushMatrix();
-      glTranslated(camera->position->x + camera->forwardDirection->x*100, camera->position->y + camera->forwardDirection->y*100, camera->position->z + camera->forwardDirection->z*100);
+      glTranslated(camera->position->x + camera->eyeDirection->x*100, camera->position->y + camera->eyeDirection->y*100, camera->position->z + camera->eyeDirection->z*100);
       glutSolidSphere(0.1, 10, 10);
     glPopMatrix();
 
