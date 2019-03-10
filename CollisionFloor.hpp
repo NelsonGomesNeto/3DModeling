@@ -2,9 +2,9 @@
 #define FLOOR_H
 
 #include <vector>
-#include "Polygon.hpp"
+#include "CollisionPolygon.hpp"
 
-class Floor {
+class CollisionFloor {
 private:
   vector<Polygon*> floorPolygons;
 public:

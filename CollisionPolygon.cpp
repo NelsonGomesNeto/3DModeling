@@ -1,5 +1,5 @@
 #include <stdexcept>
-#include "Polygon.hpp"
+#include "CollisionPolygon.hpp"
 #include "Vector.hpp"
 #include <GL/glut.h>
 

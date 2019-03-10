@@ -2,7 +2,7 @@
 #include "Vector.hpp"
 #include <stdio.h>
 
-Camera::Camera(Vector *p, Floor *pFloor, Wall *pWall) {
+Camera::Camera(Vector *p, CollisionFloor *pFloor, Wall *pWall) {
   this->position = p;
   this->angle = new Vector(0, 0, 0);
   this->forwardDirection = new Vector(0, 0, 0.1), this->rightDirection = new Vector(0.1, 0, 0), this->eyeDirection = new Vector(0, 0, 0.1);

@@ -5,7 +5,7 @@
 #ifndef INC_3DMODELING_WALL_HPP
 #define INC_3DMODELING_WALL_HPP
 #include <vector>
-#include "Polygon.hpp"
+#include "CollisionPolygon.hpp"
 
 class Wall {
 private:

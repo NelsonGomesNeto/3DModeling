@@ -2,22 +2,22 @@
 // Created by Lucas Amorim on 3/8/2019.
 //
 
-#include "Floor.hpp"
+#include "CollisionFloor.hpp"
 #include <stdexcept>
 
-void Floor::addFloorPolygon(Polygon *polygon) {
+void CollisionFloor::addFloorPolygon(Polygon *polygon) {
   if (polygon->nVertices() != 4)
     throw std::invalid_argument("Must be a 4-vertex polygon to be added to the floor.");
   this->floorPolygons.push_back(polygon);
 }
 
-void Floor::drawFloorPolygons() {
+void CollisionFloor::drawFloorPolygons() {
   for (Polygon *p: this->floorPolygons) {
     p->draw();
   }
 }
 
-void Floor::buildFloor() {
+void CollisionFloor::buildFloor() {
   vector<Vector*> v;
   v.push_back(new Vector(-20, 0, 20));
   v.push_back(new Vector(20, 0, 20));
@@ -33,7 +33,7 @@ void Floor::buildFloor() {
   this->addFloorPolygon(new Polygon(v));
 }
 
-bool Floor::checkHitBoxes(Vector *pVector) {
+bool CollisionFloor::checkHitBoxes(Vector *pVector) {
   bool overPolygon = false;
   for (Polygon *p: this->floorPolygons)
     if (p->handleCollision(pVector)) {

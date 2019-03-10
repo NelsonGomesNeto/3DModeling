@@ -8,14 +8,14 @@
 #include <math.h>
 #include "Camera.hpp"
 #include "Vector.hpp"
-#include "Floor.hpp"
-#include "Wall.hpp"
+#include "CollisionFloor.hpp"
+#include "CollisionWall.hpp"
 #include <GL/freeglut.h>
 using namespace std;
 int screenWidth = 800, screenWidthDiv2 = 400, screenHeight = 800, screenHeightDiv2 = 400;
 bool TERRAIN_DEBUG = true;
 Camera *camera;
-Floor* floors;
+CollisionFloor* floors;
 Wall* walls;
 const double pi = acos(-1);
 double radToDeg(double a) { return(a * 180 / pi); }
@@ -124,7 +124,7 @@ void init() {
 }
 
 int main(int argc, char **argv) {
-  floors = new Floor();
+  floors = new CollisionFloor();
   walls = new Wall();
   floors->buildFloor();
   walls->buildWalls();

@@ -3,7 +3,7 @@
 //
 
 #include <stdexcept>
-#include "Wall.hpp"
+#include "CollisionWall.hpp"
 
 void Wall::addWallPolygon(Polygon *polygon) {
   if (polygon->nVertices() != 4)
