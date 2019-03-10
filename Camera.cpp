@@ -17,6 +17,10 @@ void Camera::getMovements(bool keyboard[256], Vector *mouse) {
   if (keyboard['s']) *intended -= *this->forwardDirection;
   if (keyboard['a']) *intended += *this->rightDirection;
   if (keyboard['d']) *intended -= *this->rightDirection;
+  if (keyboard['W']) *intended += *this->forwardDirection->div(40);
+  if (keyboard['S']) *intended -= *this->forwardDirection->div(40);
+  if (keyboard['A']) *intended += *this->rightDirection->div(40);
+  if (keyboard['D']) *intended -= *this->rightDirection->div(40);
   // intended->y -= 0.05;
 
 
@@ -34,6 +38,8 @@ void Camera::getMovements(bool keyboard[256], Vector *mouse) {
   if (keyboard['p']) mouse->z += 0.1;
   if (keyboard['P']) mouse->z -= 0.1;
   // printf("%lf\n", mouse->z);
+
+  if (keyboard['2']) printf("(%8.3lf, %8.3lf, %8.3lf)\n", this->position->x + this->eyeDirection->x*2, this->position->y + 1 + this->eyeDirection->y*2, this->position->z + this->eyeDirection->z*2);
 }
 
 void Camera::update() {

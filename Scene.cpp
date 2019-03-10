@@ -19,14 +19,14 @@ void Scene::loadScene() {
     fscanf(f, "%lf %lf %lf %lf %lf %lf %lf", &x, &y, &z, &xAngle, &yAngle, &width, &height);
     rectangles.push_back(new Rect(new Vector(x, y, z), xAngle, yAngle, width, height));
   }
-//  fscanf(f, "%d", &r);dww
-//  while (fscanf(f, "%c", &end) && end != '\n'); // jumps a
-//  while (r --)
-//  {
-//    double v1x, v1y, v1z, v2x, v2y, v2z, v3x, v3y, v3z;
-//    fscanf(f, "%lf %lf %lf %lf %lf %lf %lf %lf %lf", &v1x, &v1y, &v1z, &v2x, &v2y, &v2z, &v3z, &v3y, &v3z);
-//    triangles.push_back(new Triangle( new Vector*[3]{new Vector(v1x, v1y, v1z), new Vector(v2x, v2y, v2z), new Vector(v3x, v3y, v3z)}));
-//  }
+  fscanf(f, "%d", &r);
+  while (fscanf(f, "%c", &end) && end != '\n'); // jumps a
+  while (r --)
+  {
+    double v1x, v1y, v1z, v2x, v2y, v2z, v3x, v3y, v3z;
+    fscanf(f, "%lf %lf %lf %lf %lf %lf %lf %lf %lf", &v1x, &v1y, &v1z, &v2x, &v2y, &v2z, &v3x, &v3y, &v3z);
+    triangles.push_back(new Triangle( new Vector*[3]{new Vector(v1x, v1y, v1z), new Vector(v2x, v2y, v2z), new Vector(v3x, v3y, v3z)}));
+  }
   fclose(f);
 }
 
@@ -59,12 +59,12 @@ void Scene::getMovements(bool *keyboard) {
   if (this->rectangles.empty())
     return;
   rect = this->rectangles.back();
-  if (keyboard['u']) rect->position->x += 0.1;
-  if (keyboard['j']) rect->position->x -= 0.1;
-  if (keyboard['h']) rect->position->z += 0.1;
-  if (keyboard['k']) rect->position->z -= 0.1;
-  if (keyboard['o']) rect->position->y += 0.1;
-  if (keyboard['l']) rect->position->y -= 0.1;
+  if (keyboard['u']) rect->position->x += 0.01;
+  if (keyboard['j']) rect->position->x -= 0.01;
+  if (keyboard['h']) rect->position->z += 0.01;
+  if (keyboard['k']) rect->position->z -= 0.01;
+  if (keyboard['o']) rect->position->y += 0.01;
+  if (keyboard['l']) rect->position->y -= 0.01;
 
 
   if (keyboard['y']) {
@@ -84,10 +84,10 @@ void Scene::getMovements(bool *keyboard) {
     keyboard['g'] = false;
   }
 
-  if (keyboard['6']) rect->width -= 0.1;
-  if (keyboard['7']) rect->width += 0.1;
-  if (keyboard['8']) rect->height -= 0.1;
-  if (keyboard['9']) rect->height += 0.1;
+  if (keyboard['6']) rect->width -= 0.01;
+  if (keyboard['7']) rect->width += 0.01;
+  if (keyboard['8']) rect->height -= 0.01;
+  if (keyboard['9']) rect->height += 0.01;
 
   if (keyboard['b']) rect->xAngle = rect->yAngle = 0;
   if (keyboard['v']) rect->print();
