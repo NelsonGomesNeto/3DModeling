@@ -9,12 +9,14 @@
 #include "Camera.hpp"
 #include "Vector.hpp"
 #include "Floor.hpp"
+#include "Wall.hpp"
 #include <GL/freeglut.h>
 using namespace std;
 int screenWidth = 800, screenWidthDiv2 = 400, screenHeight = 800, screenHeightDiv2 = 400;
-bool FLOOR_DEBUG = true;
+bool TERRAIN_DEBUG = true;
 Camera *camera;
 Floor* floors;
+Wall* walls;
 const double pi = acos(-1);
 double radToDeg(double a) { return(a * 180 / pi); }
 
@@ -40,14 +42,14 @@ void update(int value) {
 }
 
 void drawGrid() {
-  glDisable(GL_LIGHTING);
+  //glDisable(GL_LIGHTING);
   glBegin(GL_LINES);
     for (int i = -20; i <= 20; i ++) {
       glColor3ub(  0, 100, 155); glVertex3d(-20, 0, i); glVertex3d(20, 0, i); // x axis
       glColor3ub(100,   0,   0); glVertex3d(i, 0, -20); glVertex3d(i, 0, 20); // z axis
     }
   glEnd();
-  glEnable(GL_LIGHTING);
+  //glEnable(GL_LIGHTING);
   for (int i = -20; i <= 20; i ++)
     for (int j = -20; j <= 20; j ++) {
       glPushMatrix();
@@ -73,10 +75,10 @@ void display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glPushMatrix();
-    gluLookAt(camera->position->x, camera->position->y, camera->position->z,
+    gluLookAt(camera->position->x, camera->position->y + 1, camera->position->z,
               camera->position->x + camera->eyeDirection->x*100, camera->position->y + camera->eyeDirection->y*100, camera->position->z + camera->eyeDirection->z*100,
               0, 1, 0);
-    lightsSetup();
+    //lightsSetup();
 
     glColor3ub(255, 255, 255);
     glPushMatrix();
@@ -85,8 +87,10 @@ void display() {
     glPopMatrix();
 
     drawGrid();
-    if (FLOOR_DEBUG)
+    if (TERRAIN_DEBUG) {
       floors->drawFloorPolygons();
+      walls->drawWallPolygons();
+    }
     glColor3ub(255, 255, 255); glutSolidSphere(0.5, 10, 10);
   glPopMatrix();
 
@@ -108,10 +112,10 @@ void reshape(int width, int height) {
 void init() {
   glEnable(GL_DEPTH_TEST);
 
-  glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
-  glEnable(GL_COLOR_MATERIAL);
-  glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+//  glEnable(GL_LIGHTING);
+//  glEnable(GL_LIGHT0);
+  //glEnable(GL_COLOR_MATERIAL);
+//  glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 
   glMatrixMode(GL_PROJECTION);
   gluPerspective(65, (double) screenWidth / screenHeight, 0.1, 300);
@@ -121,8 +125,10 @@ void init() {
 
 int main(int argc, char **argv) {
   floors = new Floor();
+  walls = new Wall();
   floors->buildFloor();
-  camera = new Camera(new Vector(0, 1, 0), floors);
+  walls->buildWalls();
+  camera = new Camera(new Vector(0, 1, 0), floors, walls);
   mouse = new Vector(0, 0, 0);
 
   glutInit(&argc, argv);

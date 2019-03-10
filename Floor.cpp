@@ -33,14 +33,12 @@ void Floor::buildFloor() {
   this->addFloorPolygon(new Polygon(v));
 }
 
-Vector* Floor::checkHitBoxes(Vector *pVector) {
+bool Floor::checkHitBoxes(Vector *pVector) {
   bool overPolygon = false;
   for (Polygon *p: this->floorPolygons)
     if (p->handleCollision(pVector)) {
       overPolygon = true;
     }
-  if (!overPolygon)
-    printf("out of bounds\n");
-  return pVector;
+  return overPolygon;
 }
 

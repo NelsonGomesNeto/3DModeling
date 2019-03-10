@@ -7,7 +7,7 @@ using namespace std;
 
 class Polygon {
 private:
-  vector<Vector*> vertices;
+  vector<Vector*> vertices ,upperHitBox, lowerHitBox;
   Vector* normalVector;
   double maxUpperX = -100000, maxUpperY = -100000, maxUpperZ = -100000;
   double minUpperX = 100000, minUpperY = 100000, minUpperZ = 100000;

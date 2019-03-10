@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_PREFIX_PATH "C:/mingw64")
 
-add_executable(3DModeling ${3DModeling_src} Floor.hpp Polygon.hpp Polygon.cpp Floor.cpp)
+add_executable(3DModeling ${3DModeling_src} Floor.hpp Polygon.hpp Polygon.cpp Floor.cpp Wall.cpp Wall.hpp)
 
 include_directories(C:/mingw64/include)
 
