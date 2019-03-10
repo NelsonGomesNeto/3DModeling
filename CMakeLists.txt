@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_PREFIX_PATH "C:/mingw64")
 
-add_executable(3DModeling ${3DModeling_src})
+add_executable(3DModeling ${3DModeling_src} Triangle.cpp Triangle.hpp)
 
 include_directories(C:/mingw64/include)
 

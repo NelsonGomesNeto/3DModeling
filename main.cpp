@@ -16,14 +16,14 @@
 #include <GL/freeglut.h>
 using namespace std;
 int screenWidth = 800, screenWidthDiv2 = 400, screenHeight = 800, screenHeightDiv2 = 400;
-#define FLOOR_DEBUG if(1)
+#define FLOOR_DEBUG if(0)
 #define LIGHTS if(0)
 #define CURSOR_BALL if(0)
 Camera *camera;
 CollisionFloor* floors;
 Wall* walls;
 Scene *scene;
-Rect *scratchRectangle;
+//Rect *scratchRectangle;
 const double pi = acos(-1);
 double radToDeg(double a) { return(a * 180 / pi); }
 
@@ -45,8 +45,8 @@ void update(int value) {
   glutTimerFunc(10, update, 1);
   camera->getMovements(keyboard, mouse);
   camera->update();
-  scene->loadScene(keyboard);
-  scratchRectangle->getMovements(keyboard);
+  //scene->loadScene(keyboard);
+  scene->getMovements(keyboard);
   // scratchRectangle->print();
   glutPostRedisplay();
 }
@@ -54,14 +54,14 @@ void update(int value) {
 void drawGrid() {
   LIGHTS glDisable(GL_LIGHTING);
   glBegin(GL_LINES);
-    for (int i = -20; i <= 20; i ++) {
-      glColor3ub(  0, 100, 155); glVertex3d(-20, 0, i); glVertex3d(20, 0, i); // x axis
-      glColor3ub(100,   0,   0); glVertex3d(i, 0, -20); glVertex3d(i, 0, 20); // z axis
+    for (int i = -16; i <= 16; i ++) {
+      glColor3ub(  0, 100, 155); glVertex3d(-16, 0, i); glVertex3d(16, 0, i); // x axis
+      glColor3ub(100,   0,   0); glVertex3d(i, 0, -16); glVertex3d(i, 0, 16); // z axis
     }
   glEnd();
   LIGHTS glEnable(GL_LIGHTING);
-  for (int i = -20; i <= 20; i ++)
-    for (int j = -20; j <= 20; j ++) {
+  for (int i = -16; i <= 16; i ++)
+    for (int j = -16; j <= 16; j ++) {
       glPushMatrix();
         glTranslated(i, 0, j);
         glColor3ub(255, 255, 255); glutSolidSphere(0.1, 10, 10);
@@ -119,7 +119,6 @@ void display() {
     glColor3ub(255, 255, 255); glutSolidSphere(0.5, 10, 10);
 
     scene->draw();
-    scratchRectangle->draw();
   glPopMatrix();
 
   glutSwapBuffers();
@@ -163,7 +162,6 @@ int main(int argc, char **argv) {
   camera = new Camera(new Vector(0, 1, 0), floors, walls);
   mouse = new Vector(0, 0, 0);
   scene = new Scene();
-  scratchRectangle = new Rect(new Vector(0, 1, 0), 2, 2);
 
   glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
