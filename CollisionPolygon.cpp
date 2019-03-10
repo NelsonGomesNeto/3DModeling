@@ -3,6 +3,9 @@
 #include "Vector.hpp"
 #include <GL/glut.h>
 
+#define FLOOR_HITBOX_SIZE 0.2
+#define WALL_HITBOX_SIZE 2
+
 Polygon::Polygon(vector<Vector *> vertices) {
   if (vertices.size() < 2)
     throw std::invalid_argument("A polygon must have at least 3 vertices.");
@@ -10,15 +13,17 @@ Polygon::Polygon(vector<Vector *> vertices) {
   Vector *v1 = *this->vertices[1] - *this->vertices[0];
   Vector *v2 = *this->vertices[2] - *this->vertices[0];
   this->normalVector = v1->cross(v2)->normalize();
-  this->normalVector->print();
   upperHitBox = vertices;
   lowerHitBox = vertices;
   Vector *k = this->normalVector->copy();
+  if (this->isFloor() && k->y < 0) {
+    k->mult(-1);
+  }
   // this will effectly represent the hitbox size
   if (this->isFloor())
-    k->mult(0.1);
+    k->mult(FLOOR_HITBOX_SIZE);
   else
-    k->mult(2);
+    k->mult(WALL_HITBOX_SIZE);
   for (int i = 0; i < 4; i++) {
     upperHitBox.push_back(*upperHitBox[i] + *k);
     lowerHitBox.push_back(*lowerHitBox[i] - *k);
@@ -115,18 +120,22 @@ bool Polygon::handleCollision(Vector *pVector) {
   // floor check
   // check if point is inside upper hit box
   if (this->minUpperX <= pVector->x && pVector->x <= this->maxUpperX
-      && this->minUpperY <= pVector->y && pVector->y <= this->maxUpperY
-      && this->minUpperZ <= pVector->z && pVector->z <= this->maxUpperZ) {
-    // inside upper hitbox, we need to snap pVector to the y coordinate of this floor
-    pVector->y = this->heightAt(pVector);
-    return true;
+        && this->minUpperY <= pVector->y && pVector->y <= this->maxUpperY
+        && this->minUpperZ <= pVector->z && pVector->z <= this->maxUpperZ) {
+    double floorHeight = this->heightAt(pVector);
+    printf("%f\n", floorHeight);
+    if (pVector->y > floorHeight + FLOOR_HITBOX_SIZE)
+      pVector->y = this->heightAt(pVector);
+    //return true;
   }
 
   if (this->minLowerX <= pVector->x && pVector->x <= this->maxLowerX
       && this->minLowerY <= pVector->y && pVector->y <= this->maxLowerY
       && this->minLowerZ <= pVector->z && pVector->z <= this->maxLowerZ) {
     // inside lower hitbox, we need to snap pVector to the y coordinate of this floor
-    pVector->y = this->heightAt(pVector);
+    double floorHeight = this->heightAt(pVector);
+    if (pVector->y > floorHeight - FLOOR_HITBOX_SIZE)
+      pVector->y = this->heightAt(pVector);
     return true;
   }
   return false;

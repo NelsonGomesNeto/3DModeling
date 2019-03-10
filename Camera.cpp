@@ -21,8 +21,7 @@ void Camera::getMovements(bool keyboard[256], Vector *mouse) {
   // intended->y -= 0.05;
 
 
-  if (this->pFloor->checkHitBoxes(intended))
-    this->position = intended->copy();
+  this->pFloor->checkHitBoxes(intended);
   if (!this->pWall->checkHitBoxes(intended, this->position))
     this->position = intended;
 
@@ -35,6 +34,7 @@ void Camera::getMovements(bool keyboard[256], Vector *mouse) {
   // changes flashlight angle
   if (keyboard['p']) mouse->z += 0.1;
   if (keyboard['P']) mouse->z -= 0.1;
+  // printf("%lf\n", mouse->z);
 }
 
 void Camera::update() {
@@ -43,4 +43,3 @@ void Camera::update() {
   this->eyeDirection->rotateX(this->angle->x);
   this->forwardDirection->rotateY(this->angle->y), this->rightDirection->rotateY(this->angle->y), eyeDirection->rotateY(this->angle->y);
 }
-
