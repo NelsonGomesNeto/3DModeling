@@ -45,7 +45,7 @@ void update(int value) {
   camera->update();
   scene->loadScene(keyboard);
   scratchRectangle->getMovements(keyboard);
-  scratchRectangle->print();
+  // scratchRectangle->print();
   glutPostRedisplay();
 }
 

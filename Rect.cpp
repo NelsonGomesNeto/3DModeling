@@ -33,6 +33,9 @@ void Rect::getMovements(bool keyboard[256]) {
   if (keyboard['7']) this->width += 0.1;
   if (keyboard['8']) this->height -= 0.1;
   if (keyboard['9']) this->height += 0.1;
+
+  if (keyboard['b']) this->xAngle = this->yAngle = 0;
+  if (keyboard['v']) this->print();
 }
 
 void Rect::draw() {

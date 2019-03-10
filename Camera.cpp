@@ -42,7 +42,7 @@ void Camera::getMovements(bool keyboard[256], Vector *mouse) {
 
 void Camera::update() {
   this->forwardDirection->set(0, 0, this->maxSpeed), this->rightDirection->set(this->maxSpeed, 0, 0), eyeDirection->set(0, 0, this->maxSpeed);
-  // this->forwardDirection->rotateX(this->angle->x), this->rightDirection->rotateX(this->angle->x); // this enables flight mode
+  this->forwardDirection->rotateX(this->angle->x), this->rightDirection->rotateX(this->angle->x); // this enables flight mode
   this->eyeDirection->rotateX(this->angle->x);
   this->forwardDirection->rotateY(this->angle->y), this->rightDirection->rotateY(this->angle->y), eyeDirection->rotateY(this->angle->y);
 }
