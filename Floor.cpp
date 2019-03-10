@@ -39,8 +39,8 @@ Vector* Floor::checkHitBoxes(Vector *pVector) {
     if (p->handleCollision(pVector)) {
       overPolygon = true;
     }
-  if (!overPolygon)
-    printf("out of bounds\n");
+  if (!overPolygon);
+    // printf("out of bounds\n");
   return pVector;
 }
 

@@ -3,18 +3,25 @@
     #include <windows.h>
   #endif
 #endif
+#undef RECT
 #include <stdio.h>
 #include <algorithm>
 #include <math.h>
 #include "Camera.hpp"
 #include "Vector.hpp"
 #include "Floor.hpp"
+#include "Scene.hpp"
+#include "Rect.hpp"
 #include <GL/freeglut.h>
 using namespace std;
 int screenWidth = 800, screenWidthDiv2 = 400, screenHeight = 800, screenHeightDiv2 = 400;
-bool FLOOR_DEBUG = true;
+#define FLOOR_DEBUG if(1)
+#define LIGHTS if(0)
+#define CURSOR_BALL if(0)
 Camera *camera;
-Floor* floors;
+Floor *floors;
+Scene *scene;
+Rect *scratchRectangle;
 const double pi = acos(-1);
 double radToDeg(double a) { return(a * 180 / pi); }
 
@@ -36,18 +43,21 @@ void update(int value) {
   glutTimerFunc(10, update, 1);
   camera->getMovements(keyboard, mouse);
   camera->update();
+  scene->loadScene(keyboard);
+  scratchRectangle->getMovements(keyboard);
+  scratchRectangle->print();
   glutPostRedisplay();
 }
 
 void drawGrid() {
-  glDisable(GL_LIGHTING);
+  LIGHTS glDisable(GL_LIGHTING);
   glBegin(GL_LINES);
     for (int i = -20; i <= 20; i ++) {
       glColor3ub(  0, 100, 155); glVertex3d(-20, 0, i); glVertex3d(20, 0, i); // x axis
       glColor3ub(100,   0,   0); glVertex3d(i, 0, -20); glVertex3d(i, 0, 20); // z axis
     }
   glEnd();
-  glEnable(GL_LIGHTING);
+  LIGHTS glEnable(GL_LIGHTING);
   for (int i = -20; i <= 20; i ++)
     for (int j = -20; j <= 20; j ++) {
       glPushMatrix();
@@ -55,18 +65,36 @@ void drawGrid() {
         glColor3ub(255, 255, 255); glutSolidSphere(0.1, 10, 10);
       glPopMatrix();
     }
+
+  glPushMatrix();
+    glTranslated(5, 5, 5);
+    glutSolidCube(2);
+  glPopMatrix();
+}
+
+void drawCursorBall() {
+  glPushMatrix();
+    glColor3ub(255, 255, 255);
+    glTranslated(camera->position->x + camera->eyeDirection->x*2, camera->position->y + camera->eyeDirection->y*2, camera->position->z + camera->eyeDirection->z*2);
+    glutSolidSphere(0.01, 10, 10);
+  glPopMatrix();
 }
 
 void lightsSetup() {
-  GLfloat specularReflection[] = {1, 1, 1, 1};
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specularReflection); // Defines objects reflection to specular light
-  glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 1); // Defines objects level of reflection (0 to 128)
-  GLfloat lightAmbient[] = {1, 0, 0, 1}; glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
-  GLfloat lightDiffuse[] = {1, 0, 0, 1}; glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
-  GLfloat lightSpecular[] = {0, 0, 1, 1}; glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular);
+  GLfloat materialAmbientAndDiffuse[] = {1, 1, 1, 1};
+  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, materialAmbientAndDiffuse); // Defines objects reflection to ambient and diffuse light
+  GLfloat materialSpecular[] = {1, 1, 1, 1};
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, materialSpecular); // Defines objects reflection to specular light
+  glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128); // Defines objects level of reflection (0 to 128)
+  GLfloat lightAmbient[] = {0, 0, 0, 1}; glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
+  GLfloat lightDiffuse[] = {0.8, 0.8, 0.8, 1}; glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
+  GLfloat lightSpecular[] = {1, 1, 1, 1}; glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular);
   GLfloat lightSpotCutoff = 10 + mouse->z; glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, lightSpotCutoff);
-  GLfloat lightPosition[] = {(GLfloat) camera->position->x, (GLfloat) camera->position->y, (GLfloat) camera->position->z, 1}; glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-  GLfloat lightSpotDirection[] = {(GLfloat) camera->eyeDirection->x, (GLfloat) camera->eyeDirection->y, (GLfloat) camera->eyeDirection->z}; glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightSpotDirection);
+  glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.1);
+  GLfloat lightPosition[] = {(GLfloat) camera->position->x, (GLfloat) camera->position->y, (GLfloat) camera->position->z, 1};
+  glLightfv(GL_LIGHT0, GL_POSITION, lightPosition); 
+  GLfloat lightSpotDirection[] = {(GLfloat) camera->eyeDirection->x, (GLfloat) camera->eyeDirection->y, (GLfloat) camera->eyeDirection->z};
+  glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightSpotDirection);
 }
 
 void display() {
@@ -78,16 +106,15 @@ void display() {
               0, 1, 0);
     lightsSetup();
 
-    glColor3ub(255, 255, 255);
-    glPushMatrix();
-      glTranslated(camera->position->x + camera->eyeDirection->x*100, camera->position->y + camera->eyeDirection->y*100, camera->position->z + camera->eyeDirection->z*100);
-      glutSolidSphere(0.1, 10, 10);
-    glPopMatrix();
+    CURSOR_BALL drawCursorBall();
 
     drawGrid();
-    if (FLOOR_DEBUG)
-      floors->drawFloorPolygons();
+
+    FLOOR_DEBUG floors->drawFloorPolygons();
     glColor3ub(255, 255, 255); glutSolidSphere(0.5, 10, 10);
+
+    scene->draw();
+    scratchRectangle->draw();
   glPopMatrix();
 
   glutSwapBuffers();
@@ -108,10 +135,14 @@ void reshape(int width, int height) {
 void init() {
   glEnable(GL_DEPTH_TEST);
 
-  glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
-  glEnable(GL_COLOR_MATERIAL);
-  glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+  LIGHTS {
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_COLOR_MATERIAL);
+    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+    glShadeModel(GL_SMOOTH);
+  }
 
   glMatrixMode(GL_PROJECTION);
   gluPerspective(65, (double) screenWidth / screenHeight, 0.1, 300);
@@ -124,6 +155,8 @@ int main(int argc, char **argv) {
   floors->buildFloor();
   camera = new Camera(new Vector(0, 1, 0), floors);
   mouse = new Vector(0, 0, 0);
+  scene = new Scene();
+  scratchRectangle = new Rect(new Vector(0, 1, 0), 2, 2);
 
   glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);

@@ -11,7 +11,7 @@ public:
   Vector* limit(double max);
   Vector* mult(double n);
   Vector* div(double n);
-  void print();
+  void print(bool nude);
   void rotateX(double angle);
   void rotateY(double angle);
   void operator+=(const Vector &a);
@@ -20,6 +20,7 @@ public:
   Vector* operator+(const Vector &a);
   Vector *copy();
   Vector *cross(Vector *pVector);
+  double dot(Vector *a);
   Vector *normalize();
 };
 

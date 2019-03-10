@@ -30,8 +30,9 @@ double Vector::magSquared() {
   return this->x * this->x + this->y * this->y + this->z * this->z;
 }
 
-void Vector::print() {
-  printf("(%8.3lf,%8.3lf,%8.3lf), mag = %8.3lf\n", this->x, this->y, this->z, sqrt(this->magSquared()));
+void Vector::print(bool nude = false) {
+  if (nude) printf("%lf %lf %lf", this->x, this->y, this->z);
+  else printf("(%8.3lf,%8.3lf,%8.3lf), mag = %8.3lf\n", this->x, this->y, this->z, sqrt(this->magSquared()));
 }
 
 void Vector::rotateX(double angle) {
@@ -77,6 +78,10 @@ Vector *Vector::copy() {
 
 Vector *Vector::cross(Vector *pVector) {
   return new Vector(this->y * pVector->z - this->z * pVector->y, this->z * pVector->x - this->x * pVector->z, this->x * pVector->y - this->y * pVector->x);
+}
+
+double Vector::dot(Vector *pVector) {
+  return(this->x * pVector->x + this->y * pVector->y + this->z * pVector->z);
 }
 
 Vector *Vector::normalize() {

@@ -37,7 +37,7 @@ void Camera::getMovements(bool keyboard[256], Vector *mouse) {
   // changes flashlight angle
   if (keyboard['p']) mouse->z += 0.1;
   if (keyboard['P']) mouse->z -= 0.1;
-  printf("%lf\n", mouse->z);
+  // printf("%lf\n", mouse->z);
 }
 
 void Camera::update() {

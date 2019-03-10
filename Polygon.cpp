@@ -10,7 +10,6 @@ Polygon::Polygon(vector<Vector *> vertices) {
   Vector* v1 = *this->vertices[1] - *this->vertices[0];
   Vector* v2 = *this->vertices[2] - *this->vertices[0];
   this->normalVector = v1->cross(v2)->normalize();
-  this->normalVector->print();
   if (this->isFloor()) {
     vector<Vector*> upperHitBox = vertices, lowerHitBox = vertices;
     Vector *k = this->normalVector->copy();
@@ -93,7 +92,7 @@ bool Polygon::handleCollision(Vector *pVector) {
    && this->minUpperZ <= pVector->z && pVector->z <= this->maxUpperZ) {
     // inside upper hitbox, we need to snap pVector to the y coordinate of this floor
     pVector->y = this->heightAt(pVector) + 1;
-    printf("Inside upper Hitbox %lf\n", pVector->y);
+    // printf("Inside upper Hitbox %lf\n", pVector->y);
     return true;
   }
 
@@ -102,7 +101,7 @@ bool Polygon::handleCollision(Vector *pVector) {
    && this->minLowerZ <= pVector->z && pVector->z <= this->maxLowerZ) {
     // inside lower hitbox, we need to snap pVector to the y coordinate of this floor
     pVector->y = this->heightAt(pVector) + 1;
-    printf("Inside lower Hitbox %lf\n", pVector->y);
+    // printf("Inside lower Hitbox %lf\n", pVector->y);
     return true;
   }
   return false;
