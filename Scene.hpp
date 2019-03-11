@@ -14,7 +14,7 @@ private:
 public:
   Scene();
   void loadScene();
-  void draw(GLuint* textureIds);
+  void draw(Vector *observerPosition, GLuint* textureIds);
 
   void getMovements(bool pBoolean[256]);
 };

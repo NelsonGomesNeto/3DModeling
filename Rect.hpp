@@ -16,6 +16,7 @@ public:
   void recalculate();
   void draw(GLuint* textureIds);
   void print();
+  double distanceTo(Vector *v);
 };
 
 #endif

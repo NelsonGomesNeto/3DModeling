@@ -1,8 +1,10 @@
 #include "Rect.hpp"
 #include <stdio.h>
 #include <math.h>
+#include<algorithm>
 #include <GL/freeglut.h>
 const double pi = acos(-1);
+using namespace std;
 
 Rect::Rect(Vector *positwion, double width, double height) {
   this->position = position;
@@ -53,4 +55,26 @@ void Rect::draw(GLuint* textureIds) {
 
 void Rect::print() {
   this->position->print(true); printf(" %lf %lf %lf %lf\n", this->xAngle, this->yAngle, this->width, this->height);
+}
+
+double Rect::distanceTo(Vector *v) {
+  double x = this->position->x, y = this->position->y, z = this->position->z;
+  // double x = 0, y = 0, z = 0;
+  // Vector *all[4];
+  // all[0] = new Vector(this->position->x*0 + this->width / 2.0, this->position->y*0 + this->height / 2.0, 0);
+  // all[1] = new Vector(this->position->x*0 - this->width / 2.0, this->position->y*0 + this->height / 2.0, 0);
+  // all[2] = new Vector(this->position->x*0 + this->width / 2.0, this->position->y*0 - this->height / 2.0, 0);
+  // all[3] = new Vector(this->position->x*0 - this->width / 2.0, this->position->y*0 - this->height / 2.0, 0);
+  // double dist = 0;
+  // for (int i = 0; i < 4; i ++) {
+  //   all[i]->rotateX(this->xAngle);
+  //   all[i]->rotateY(this->yAngle);
+  //   all[i]->x += this->position->x, all[i]->y += this->position->y, all[i]->z += this->position->z;
+  //   // x += all[i]->x, y += all[i]->y, z += all[i]->z;
+  //   // double xx = v->x - all[i]->x, yy = v->y - all[i]->y, zz = v->z - all[i]->z;
+  //   // dist = max(dist, sqrt(xx*xx + yy*yy + zz*zz));
+  // }
+  // // return(dist);
+  double xx = v->x - x, yy = v->y - y, zz = v->z - z;
+  return(sqrt(xx*xx + yy*yy + zz*zz));
 }

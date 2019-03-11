@@ -13,6 +13,7 @@ Doorr::Doorr(Vector **pVector) {
 
 void Doorr::draw() {
   glPushMatrix();
+  glColor4ub(0, 0, 0, 100);
   glTranslated(-4, 8, -1.6);
   glPushMatrix();
   glRotated(angle, 0, 1, 0);

@@ -1,6 +1,7 @@
 #include "Scene.hpp"
 #include "Rect.hpp"
 #include <stdio.h>
+#include <algorithm>
 using namespace std;
 
 Scene::Scene() {
@@ -36,14 +37,27 @@ void Scene::loadScene() {
   fclose(filePtr);
 }
 
-void Scene::draw(GLuint* textureIds) {
-  // REMEMBER to sort the draw order
-  for (Rect *rectangle: this->rectangles) {
-    rectangle->draw(textureIds);
-  }
-  for (Triangle* t: this->triangles) {
-    t->draw();
-  }
+struct Pack {
+  double dist; Rect* rectangle; Triangle* triangle;
+  bool operator<(const Pack &a) const { return(dist > a.dist); }
+};
+void Scene::draw(Vector *observerPosition, GLuint* textureIds) {
+  for (Rect *rectangle: this->rectangles) if (rectangle->A == 255) rectangle->draw(textureIds);
+  for (Triangle *triangle: this->triangles) if (triangle->A == 255) triangle->draw();
+
+  vector<Pack> toDraw;
+  for (Rect *rectangle: this->rectangles) if (rectangle->A < 255) toDraw.push_back({rectangle->distanceTo(observerPosition), rectangle, nullptr});
+  for (Triangle *triangle: this->triangles) if (triangle->A < 255) toDraw.push_back({triangle->distanceTo(observerPosition), nullptr, triangle});
+  sort(toDraw.begin(), toDraw.end());
+
+  for (Pack &p: toDraw) if (p.rectangle == nullptr) p.triangle->draw(); else p.rectangle->draw(textureIds);
+
+  // for (Rect *rectangle: this->rectangles) {
+  //   rectangle->draw();
+  // }
+  // for (Triangle* t: this->triangles) {
+  //   t->draw();
+  // }
 }
 
 void Scene::getMovements(bool *keyboard) {
