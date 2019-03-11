@@ -13,6 +13,7 @@ Triangle::Triangle(Vector* vertices[3]) {
 Triangle::Triangle(Vector* vertices[3], int R, int G, int B, int A, int textureId) {
   this->vertices = vertices;
   this->R = R, this->G = G, this->B = B, this->A = A, this->textureId = textureId;
+  this->R = rand() % 256, this->G = rand() % 256, this->B = rand() % 256, this->A = 255;
 }
 
 void Triangle::draw() {
