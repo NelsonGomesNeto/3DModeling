@@ -13,7 +13,8 @@ Triangle::Triangle(Vector* vertices[3]) {
 }
 
 void Triangle::draw() {
-  glColor3ub(this->colors[0], this->colors[1], this->colors[2]);
+  // glColor3ub(this->colors[0], this->colors[1], this->colors[2]);
+  glColor4ub(this->colors[0], this->colors[1], this->colors[2], 255);
   glBegin(GL_TRIANGLE_STRIP);
     // glTexCoord2d(0, 0);
     glVertex3d(this->vertices[0]->x, this->vertices[0]->y, this->vertices[0]->z);

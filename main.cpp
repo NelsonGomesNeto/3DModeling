@@ -149,6 +149,9 @@ void init() {
   glEnable(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, texture);
 
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
   glMatrixMode(GL_PROJECTION);
   gluPerspective(65, (double) screenWidth / screenHeight, 0.01, 300);
 
