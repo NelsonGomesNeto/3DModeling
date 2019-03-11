@@ -11,6 +11,7 @@
 class Triangle {
 public:
   Vector** vertices;
+  int colors[3];
   Triangle(Vector* vertices[3]);
 
   void draw();

@@ -3,7 +3,6 @@
     #include <windows.h>
   #endif
 #endif
-#undef RECT
 #include <stdio.h>
 #include <algorithm>
 #include <math.h>
@@ -13,12 +12,13 @@
 #include "CollisionWall.hpp"
 #include "Scene.hpp"
 #include "Rect.hpp"
+#include "Textures/textureLoader.hpp"
 #include <GL/freeglut.h>
 using namespace std;
 int screenWidth = 800, screenWidthDiv2 = 400, screenHeight = 800, screenHeightDiv2 = 400;
 #define FLOOR_DEBUG if(0)
 #define LIGHTS if(0)
-#define CURSOR_BALL if(0)
+#define CURSOR_BALL if(1)
 Camera *camera;
 CollisionFloor* floors;
 Wall* walls;
@@ -45,9 +45,7 @@ void update(int value) {
   glutTimerFunc(10, update, 1);
   camera->getMovements(keyboard, mouse);
   camera->update();
-  //scene->loadScene(keyboard);
   scene->getMovements(keyboard);
-  // scratchRectangle->print();
   glutPostRedisplay();
 }
 
@@ -73,8 +71,8 @@ void drawGrid() {
 void drawCursorBall() {
   glPushMatrix();
     glColor3ub(255, 255, 255);
-    glTranslated(camera->position->x + camera->eyeDirection->x*2, camera->position->y + camera->eyeDirection->y*2, camera->position->z + camera->eyeDirection->z*2);
-    glutSolidSphere(0.01, 10, 10);
+    glTranslated(camera->position->x + camera->eyeDirection->x*2, camera->position->y + 1 + camera->eyeDirection->y*2, camera->position->z + camera->eyeDirection->z*2);
+    glutSolidSphere(0.005, 10, 10);
   glPopMatrix();
 }
 
@@ -100,10 +98,9 @@ void display() {
 
   glPushMatrix();
     gluLookAt(camera->position->x, camera->position->y + 1, camera->position->z,
-              camera->position->x + camera->eyeDirection->x*100, camera->position->y + camera->eyeDirection->y*100, camera->position->z + camera->eyeDirection->z*100,
+              camera->position->x + camera->eyeDirection->x*100, camera->position->y + 1 + camera->eyeDirection->y*100, camera->position->z + camera->eyeDirection->z*100,
               0, 1, 0);
-    LIGHTS
-    lightsSetup();
+    LIGHTS lightsSetup();
 
     CURSOR_BALL drawCursorBall();
 
@@ -129,7 +126,7 @@ void reshape(int width, int height) {
   glViewport(0, 0, screenWidth, screenHeight);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(65, (double) screenWidth / screenHeight, 0.1, 300);
+  gluPerspective(65, (double) screenWidth / screenHeight, 0.01, 300);
 
   glMatrixMode(GL_MODELVIEW);
 }
@@ -146,8 +143,12 @@ void init() {
     glShadeModel(GL_SMOOTH);
   }
 
+  GLuint texture = loadTexture("Textures/wall.bmp", 1024, 1024);
+  glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, texture);
+
   glMatrixMode(GL_PROJECTION);
-  gluPerspective(65, (double) screenWidth / screenHeight, 0.1, 300);
+  gluPerspective(65, (double) screenWidth / screenHeight, 0.01, 300);
 
   glMatrixMode(GL_MODELVIEW);
 }
