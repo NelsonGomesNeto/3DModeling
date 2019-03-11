@@ -37,6 +37,7 @@ void Scene::loadScene() {
 }
 
 void Scene::draw() {
+  // REMEMBER to sort the draw order
   for (Rect *rectangle: this->rectangles) {
     rectangle->draw();
   }

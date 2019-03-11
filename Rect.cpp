@@ -23,7 +23,7 @@ Rect::Rect(Vector *position, double xAngle, double yAngle, double width, double 
   this->width = width, this->height = height;
   this->xAngle = xAngle, this->yAngle = yAngle;
   this->R = R, this->G = G, this->B = B, this->A = A, this->textureId = textureId;
-  this->R = rand() % 256, this->G = rand() % 256, this->B = rand() % 256, this->A = 255;
+  this->R = rand() % 256, this->G = rand() % 256, this->B = rand() % 256;
 }
 
 void Rect::getMovements(bool keyboard[256]) {
