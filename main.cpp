@@ -12,6 +12,7 @@
 #include "CollisionWall.hpp"
 #include "Scene.hpp"
 #include "Rect.hpp"
+#include "Textures/textureLoader.hpp"
 #include <GL/freeglut.h>
 using namespace std;
 int screenWidth = 800, screenWidthDiv2 = 400, screenHeight = 800, screenHeightDiv2 = 400;
@@ -144,10 +145,9 @@ void init() {
     glShadeModel(GL_SMOOTH);
   }
 
-  // glEnable(GL_TEXTURE_2D);
-  // const GLvoid *data = fopen("Textures/wall.jpg", "r");
-  // glTexImage2D(GL_TEXTURE_2D, 0, 1, 1299, 1300, 0, GL_RGBA, GL_INT, data);
-  // fclose(data);
+  GLuint texture = loadTexture("Textures/wall.bmp", 1024, 1024);
+  glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, texture);
 
   glMatrixMode(GL_PROJECTION);
   gluPerspective(65, (double) screenWidth / screenHeight, 0.01, 300);

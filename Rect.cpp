@@ -32,7 +32,13 @@ void Rect::draw() {
     glTranslated(this->position->x, this->position->y, this->position->z);
     glRotated(this->yAngle, 0, 1, 0);
     glRotated(this->xAngle, 1, 0, 0);
-    glRectd(-this->width / 2.0, -this->height / 2.0, this->width / 2.0, this->height / 2.0);
+    glBegin(GL_QUAD_STRIP);
+      glTexCoord2d(0, 1); glVertex3d(-this->width / 2.0, this->height / 2.0, 0);
+      glTexCoord2d(1, 1); glVertex3d(this->width / 2.0, this->height / 2.0, 0);
+      glTexCoord2d(0, 0); glVertex3d(-this->width / 2.0, -this->height / 2.0, 0);
+      glTexCoord2d(1, 0); glVertex3d(this->width / 2.0, -this->height / 2.0, 0);
+    glEnd();
+    // glRectd(-this->width / 2.0, -this->height / 2.0, this->width / 2.0, this->height / 2.0);
   glPopMatrix();
 }
 
