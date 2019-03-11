@@ -6,13 +6,14 @@
 #include <stdio.h>
 #include <algorithm>
 #include <math.h>
-#include "Camera.hpp"
 #include "Vector.hpp"
 #include "CollisionFloor.hpp"
 #include "CollisionWall.hpp"
+#include "Camera.hpp"
 #include "Scene.hpp"
 #include "Rect.hpp"
 #include "Textures/textureLoader.hpp"
+#include "Doorr.hpp"
 #include <GL/freeglut.h>
 using namespace std;
 int screenWidth = 800, screenWidthDiv2 = 400, screenHeight = 800, screenHeightDiv2 = 400;
@@ -23,6 +24,7 @@ Camera *camera;
 CollisionFloor* floors;
 Wall* walls;
 Scene *scene;
+Doorr* door;
 //Rect *scratchRectangle;
 const double pi = acos(-1);
 double radToDeg(double a) { return(a * 180 / pi); }
@@ -45,6 +47,7 @@ void update(int value) {
   glutTimerFunc(10, update, 1);
   camera->getMovements(keyboard, mouse);
   camera->update();
+  door->update();
   scene->getMovements(keyboard);
   glutPostRedisplay();
 }
@@ -114,6 +117,7 @@ void display() {
     glColor3ub(255, 255, 255); glutSolidSphere(0.5, 10, 10);
     glPopMatrix();
     scene->draw();
+  door->draw();
   glPopMatrix();
 
   glutSwapBuffers();
@@ -159,6 +163,7 @@ int main(int argc, char **argv) {
   floors->buildFloor();
   walls->buildWalls();
   camera = new Camera(new Vector(0, 1, 0), floors, walls);
+  door = new Doorr(camera);
   mouse = new Vector(0, 0, 0);
   scene = new Scene();
 
