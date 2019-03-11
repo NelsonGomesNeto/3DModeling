@@ -8,27 +8,36 @@ Rect::Rect(Vector *positwion, double width, double height) {
   this->position = position;
   this->width = width, this->height = height;
   this->xAngle = this->yAngle = 0;
-  this->colors[0] = rand() % 256;
-  this->colors[1] = rand() % 256;
-  this->colors[2] = rand() % 256;
+  this->R = rand() % 256, this->G = rand() % 256, this->B = rand() % 256, this->A = 255;
 }
 
 Rect::Rect(Vector *position, double xAngle, double yAngle, double width, double height) {
   this->position = position;
   this->width = width, this->height = height;
   this->xAngle = xAngle, this->yAngle = yAngle;
-  this->colors[0] = rand() % 256;
-  this->colors[1] = rand() % 256;
-  this->colors[2] = rand() % 256;
+  this->R = rand() % 256, this->G = rand() % 256, this->B = rand() % 256, this->A = 255;
+}
+
+Rect::Rect(Vector *position, double xAngle, double yAngle, double width, double height, int R, int G, int B, int A, int textureId) {
+  this->position = position;
+  this->width = width, this->height = height;
+  this->xAngle = xAngle, this->yAngle = yAngle;
+  this->R = R, this->G = G, this->B = B, this->A = A, this->textureId = textureId;
+  if (R == 255 && G == 255 && B == 255 && this->textureId == 0) {
+    int decrementR = rand() % 60;
+    this->R-= decrementR, this->G -= decrementR;
+  }
 }
 
 void Rect::getMovements(bool keyboard[256]) {
 
 }
 
-void Rect::draw() {
+void Rect::draw(GLuint* textureIds) {
+  glBindTexture(GL_TEXTURE_2D, textureIds[this->textureId]);
   glPushMatrix();
-    glColor3ub(this->colors[0], this->colors[1], this->colors[2]);
+    // glColor3ub(this->colors[0], this->colors[1], this->colors[2]);
+    glColor4ub(this->R, this->G, this->B, this->A);
     glTranslated(this->position->x, this->position->y, this->position->z);
     glRotated(this->yAngle, 0, 1, 0);
     glRotated(this->xAngle, 1, 0, 0);

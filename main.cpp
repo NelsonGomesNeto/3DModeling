@@ -25,6 +25,7 @@ CollisionFloor* floors;
 Wall* walls;
 Scene *scene;
 Doorr* door;
+GLuint textureIds[10000];
 //Rect *scratchRectangle;
 const double pi = acos(-1);
 double radToDeg(double a) { return(a * 180 / pi); }
@@ -53,18 +54,19 @@ void update(int value) {
 }
 
 void drawGrid() {
+  double gridHeight = 0;
   LIGHTS glDisable(GL_LIGHTING);
   glBegin(GL_LINES);
     for (int i = -16; i <= 16; i ++) {
-      glColor3ub(  0, 100, 155); glVertex3d(-16, 11, i); glVertex3d(16, 11, i); // x axis
-      glColor3ub(100,   0,   0); glVertex3d(i, 11, -16); glVertex3d(i, 11, 16); // z axis
+      glColor3ub(  0, 100, 155); glVertex3d(-16, gridHeight, i); glVertex3d(16, gridHeight, i); // x axis
+      glColor3ub(100,   0,   0); glVertex3d(i, gridHeight, -16); glVertex3d(i, gridHeight, 16); // z axis
     }
   glEnd();
   LIGHTS glEnable(GL_LIGHTING);
   for (int i = -16; i <= 16; i ++)
     for (int j = -16; j <= 16; j ++) {
       glPushMatrix();
-        glTranslated(i, 11, j);
+        glTranslated(i, gridHeight, j);
         glColor3ub(255, 255, 255); glutSolidSphere(0.1, 10, 10);
       glPopMatrix();
     }
@@ -116,7 +118,7 @@ void display() {
     glTranslated(0, 11, 0);
     glColor3ub(255, 255, 255); glutSolidSphere(0.5, 10, 10);
     glPopMatrix();
-    scene->draw();
+    scene->draw(textureIds);
   door->draw();
   glPopMatrix();
 
@@ -148,8 +150,14 @@ void init() {
   }
 
   GLuint texture = loadTexture("Textures/wall.bmp", 1024, 1024);
+  textureIds[0] = texture;
+  texture = loadTexture("Textures/window.bmp", 350, 346);
+  textureIds[1] = texture;
   glEnable(GL_TEXTURE_2D);
-  glBindTexture(GL_TEXTURE_2D, texture);
+  glBindTexture(GL_TEXTURE_2D, textureIds[0]);
+
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   glMatrixMode(GL_PROJECTION);
   gluPerspective(65, (double) screenWidth / screenHeight, 0.01, 300);

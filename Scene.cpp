@@ -10,35 +10,36 @@ Scene::Scene() {
 void Scene::loadScene() {
   rectangles.clear();
   triangles.clear();
-  FILE *f = fopen("scene", "rb+");
-  int r; fscanf(f, "%d", &r);
-  char end, comment; while (fscanf(f, "%c", &end) && end != '\n'); // jumps a 
-  while (r --)
+  FILE *filePtr = fopen("scene", "rb+");
+  int objects; fscanf(filePtr, "%d", &objects);
+  char end, comment; while (fscanf(filePtr, "%c", &end) && end != '\n'); // jumps a 
+  while (objects --)
   {
-    fscanf(f, "%c", &comment);
-    if (comment == '/') while (fscanf(f, "%c", &end) && end != '\n'); 
-    else fseek(f, -1, SEEK_CUR);
-    double x, y, z, xAngle, yAngle, width, height;
-    fscanf(f, "%lf %lf %lf %lf %lf %lf %lf\n", &x, &y, &z, &xAngle, &yAngle, &width, &height);
-    rectangles.push_back(new Rect(new Vector(x, y, z), xAngle, yAngle, width, height));
+    fscanf(filePtr, "%c", &comment);
+    if (comment == '/') while (fscanf(filePtr, "%c", &end) && end != '\n'); 
+    else fseek(filePtr, -1, SEEK_CUR);
+    double x, y, z, xAngle, yAngle, width, height; int R, G, B, A, textureId;
+    fscanf(filePtr, "%lf %lf %lf %lf %lf %lf %lf %d %d %d %d %d\n", &x, &y, &z, &xAngle, &yAngle, &width, &height, &R, &G, &B, &A, &textureId);
+    rectangles.push_back(new Rect(new Vector(x, y, z), xAngle, yAngle, width, height, R, G, B, A, textureId));
   }
-  fscanf(f, "%d", &r);
-  while (fscanf(f, "%c", &end) && end != '\n');
-  while (r --)
+  fscanf(filePtr, "%d", &objects);
+  while (fscanf(filePtr, "%c", &end) && end != '\n');
+  while (objects --)
   {
-    fscanf(f, "%c", &comment);
-    if (comment == '/') while (fscanf(f, "%c", &end) && end != '\n');
-    else fseek(f, -1, SEEK_CUR);
-    double v1x, v1y, v1z, v2x, v2y, v2z, v3x, v3y, v3z;
-    fscanf(f, "%lf %lf %lf %lf %lf %lf %lf %lf %lf\n", &v1x, &v1y, &v1z, &v2x, &v2y, &v2z, &v3x, &v3y, &v3z);
-    triangles.push_back(new Triangle( new Vector*[3]{new Vector(v1x, v1y, v1z), new Vector(v2x, v2y, v2z), new Vector(v3x, v3y, v3z)}));
+    fscanf(filePtr, "%c", &comment);
+    if (comment == '/') while (fscanf(filePtr, "%c", &end) && end != '\n');
+    else fseek(filePtr, -1, SEEK_CUR);
+    double v1x, v1y, v1z, v2x, v2y, v2z, v3x, v3y, v3z; int R, G, B, A, textureId;
+    fscanf(filePtr, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %d %d\n", &v1x, &v1y, &v1z, &v2x, &v2y, &v2z, &v3x, &v3y, &v3z, &R, &G, &B, &A, &textureId);
+    triangles.push_back(new Triangle(new Vector*[3]{new Vector(v1x, v1y, v1z), new Vector(v2x, v2y, v2z), new Vector(v3x, v3y, v3z)}, R, G, B, A, textureId));
   }
-  fclose(f);
+  fclose(filePtr);
 }
 
-void Scene::draw() {
+void Scene::draw(GLuint* textureIds) {
+  // REMEMBER to sort the draw order
   for (Rect *rectangle: this->rectangles) {
-    rectangle->draw();
+    rectangle->draw(textureIds);
   }
   for (Triangle* t: this->triangles) {
     t->draw();
@@ -98,3 +99,4 @@ void Scene::getMovements(bool *keyboard) {
   if (keyboard['b']) rect->xAngle = rect->yAngle = 0;
   if (keyboard['v']) rect->print();
 }
+
