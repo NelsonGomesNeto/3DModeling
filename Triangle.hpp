@@ -11,8 +11,9 @@
 class Triangle {
 public:
   Vector** vertices;
-  int colors[3];
+  int R, G, B, A, textureId;
   Triangle(Vector* vertices[3]);
+  Triangle(Vector* vertices[3], int R, int G, int B, int A, int textureId);
 
   void draw();
 };
