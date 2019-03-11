@@ -55,23 +55,19 @@ void drawGrid() {
   LIGHTS glDisable(GL_LIGHTING);
   glBegin(GL_LINES);
     for (int i = -16; i <= 16; i ++) {
-      glColor3ub(  0, 100, 155); glVertex3d(-16, 0, i); glVertex3d(16, 0, i); // x axis
-      glColor3ub(100,   0,   0); glVertex3d(i, 0, -16); glVertex3d(i, 0, 16); // z axis
+      glColor3ub(  0, 100, 155); glVertex3d(-16, 11, i); glVertex3d(16, 11, i); // x axis
+      glColor3ub(100,   0,   0); glVertex3d(i, 11, -16); glVertex3d(i, 11, 16); // z axis
     }
   glEnd();
   LIGHTS glEnable(GL_LIGHTING);
   for (int i = -16; i <= 16; i ++)
     for (int j = -16; j <= 16; j ++) {
       glPushMatrix();
-        glTranslated(i, 0, j);
+        glTranslated(i, 11, j);
         glColor3ub(255, 255, 255); glutSolidSphere(0.1, 10, 10);
       glPopMatrix();
     }
 
-  glPushMatrix();
-    glTranslated(5, 5, 5);
-    glutSolidCube(2);
-  glPopMatrix();
 }
 
 void drawCursorBall() {
@@ -116,8 +112,10 @@ void display() {
       floors->drawFloorPolygons();
       walls->drawWallPolygons();
     }
+    glPushMatrix();
+    glTranslated(0, 11, 0);
     glColor3ub(255, 255, 255); glutSolidSphere(0.5, 10, 10);
-
+    glPopMatrix();
     scene->draw();
   glPopMatrix();
 
