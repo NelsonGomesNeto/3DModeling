@@ -14,7 +14,7 @@ private:
 public:
   Scene();
   void loadScene();
-  void draw();
+  void draw(Vector *observerPosition);
 
   void getMovements(bool pBoolean[256]);
 };

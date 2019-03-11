@@ -114,7 +114,7 @@ void display() {
     glTranslated(0, 11, 0);
     glColor3ub(255, 255, 255); glutSolidSphere(0.5, 10, 10);
     glPopMatrix();
-    scene->draw();
+    scene->draw(camera->position);
   glPopMatrix();
 
   glutSwapBuffers();

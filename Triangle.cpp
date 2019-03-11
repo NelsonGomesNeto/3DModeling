@@ -4,6 +4,7 @@
 
 #include <GL/glut.h>
 #include "Triangle.hpp"
+#include <math.h>
 
 Triangle::Triangle(Vector* vertices[3]) {
   this->vertices = vertices;
@@ -27,4 +28,13 @@ void Triangle::draw() {
     glTexCoord2d(1, 1);
     glVertex3d(this->vertices[2]->x, this->vertices[2]->y, this->vertices[2]->z);
   glEnd();
+}
+
+double Triangle::distanceTo(Vector *v) {
+  double x = 0, y = 0, z = 0;
+  for (int i = 0; i < 3; i ++)
+    x += this->vertices[i]->x, y += this->vertices[i]->y, z += this->vertices[i]->z;
+  x /= 3, y /= 3, z /= 3;
+  double xx = v->x - x, yy = v->y - y, zz = v->z - z;
+  return(sqrt(xx*xx + yy*yy + zz*zz));
 }

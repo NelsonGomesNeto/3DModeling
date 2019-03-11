@@ -15,6 +15,7 @@ public:
   void recalculate();
   void draw();
   void print();
+  double distanceTo(Vector *v);
 };
 
 #endif
