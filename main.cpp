@@ -20,6 +20,7 @@ int screenWidth = 800, screenWidthDiv2 = 400, screenHeight = 800, screenHeightDi
 #define FLOOR_DEBUG if(0)
 #define LIGHTS if(0)
 #define CURSOR_BALL if(1)
+#define GRID if(0)
 Camera *camera;
 CollisionFloor* floors;
 Wall* walls;
@@ -109,17 +110,41 @@ void display() {
 
     CURSOR_BALL drawCursorBall();
 
-    drawGrid();
+    GRID drawGrid();
     FLOOR_DEBUG {
       floors->drawFloorPolygons();
       walls->drawWallPolygons();
     }
-    glPushMatrix();
-    glTranslated(0, 11, 0);
-    glColor3ub(255, 255, 255); glutSolidSphere(0.5, 10, 10);
-    glPopMatrix();
+//    glPushMatrix();
+//    glTranslated(0, 11, 0);
+//    glColor3ub(255, 255, 255); glutSolidSphere(0.5, 10, 10);
+//    glPopMatrix();
     scene->draw(camera->position, textureIds);
-  door->draw();
+    door->draw();
+
+    glDisable(GL_TEXTURE_2D);
+    glColor4ub(176, 163, 119, 255);
+    glPushMatrix();
+      glTranslated(-5, 4, -3.7);
+      glRotated(-90, 1, 0, 0);
+      gluCylinder(gluNewQuadric(), 0.5, 0.5, 10, 10, 50);
+    glPopMatrix();
+    glPushMatrix();
+      glTranslated(-5, 4, -6.2);
+      glRotated(-90, 1, 0, 0);
+      gluCylinder(gluNewQuadric(), 0.5, 0.5, 10, 10, 50);
+    glPopMatrix();
+    glPushMatrix();
+      glTranslated(-5, 4, 3.7);
+      glRotated(-90, 1, 0, 0);
+      gluCylinder(gluNewQuadric(), 0.5, 0.5, 10, 10, 50);
+    glPopMatrix();
+    glPushMatrix();
+      glTranslated(-5, 4, 6.2);
+      glRotated(-90, 1, 0, 0);
+      gluCylinder(gluNewQuadric(), 0.5, 0.5, 10, 10, 50);
+    glPopMatrix();
+    glEnable(GL_TEXTURE_2D);
   glPopMatrix();
 
   glutSwapBuffers();
@@ -153,6 +178,16 @@ void init() {
   textureIds[0] = texture;
   texture = loadTexture("Textures/window.bmp", 350, 346);
   textureIds[1] = texture;
+  texture = loadTexture("Textures/atari.bmp", 500, 359);
+  textureIds[2] = texture;
+  texture = loadTexture("Textures/keypad.bmp", 582, 674);
+  textureIds[3] = texture;
+  texture = loadTexture("Textures/radio.bmp", 482, 231);
+  textureIds[4] = texture;
+  texture = loadTexture("Textures/keyboard.bmp", 612, 292);
+  textureIds[5] = texture;
+  texture = loadTexture("Textures/floor.bmp", 225, 225);
+  textureIds[6] = texture;
   glEnable(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, textureIds[0]);
 
@@ -170,7 +205,7 @@ int main(int argc, char **argv) {
   walls = new Wall();
   floors->buildFloor();
   walls->buildWalls();
-  camera = new Camera(new Vector(0, 1, 0), floors, walls);
+  camera = new Camera(new Vector(-24, 1, 0), floors, walls);
   door = new Doorr(&(camera->position));
   mouse = new Vector(0, 0, 0);
   scene = new Scene();

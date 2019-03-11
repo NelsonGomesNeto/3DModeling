@@ -17,8 +17,9 @@ Triangle::Triangle(Vector* vertices[3], int R, int G, int B, int A, int textureI
   //this->R = rand() % 256, this->G = rand() % 256, this->B = rand() % 256, this->A = 255;
 }
 
-void Triangle::draw() {
-  // glBindTexture(GL_TEXTURE_2D, this->textureId);
+void Triangle::draw(GLuint* textureIds) {
+  if (this->textureId > -1) glBindTexture(GL_TEXTURE_2D, textureIds[this->textureId]);
+  else glDisable(GL_TEXTURE_2D);
   glColor4ub(this->R, this->G, this->B, this->A);
   glBegin(GL_TRIANGLE_STRIP);
     glTexCoord2d(0, 0);
@@ -28,6 +29,7 @@ void Triangle::draw() {
     glTexCoord2d(1, 1);
     glVertex3d(this->vertices[2]->x, this->vertices[2]->y, this->vertices[2]->z);
   glEnd();
+  if (this->textureId == -1) glEnable(GL_TEXTURE_2D);
 }
 
 double Triangle::distanceTo(Vector *v) {

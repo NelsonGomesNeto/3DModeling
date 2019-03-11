@@ -1,5 +1,5 @@
-size = 10
-inc = [0, 0, -5]
+size = 15
+inc = [1.5, 10, 10.5]
 array = []
 for i in range(size):
     array += [list(map(float, input().split()))]

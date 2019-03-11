@@ -36,9 +36,9 @@ void Rect::getMovements(bool keyboard[256]) {
 }
 
 void Rect::draw(GLuint* textureIds) {
-  glBindTexture(GL_TEXTURE_2D, textureIds[this->textureId]);
+  if (this->textureId > -1) glBindTexture(GL_TEXTURE_2D, textureIds[this->textureId]);
+  else glDisable(GL_TEXTURE_2D);
   glPushMatrix();
-    // glColor3ub(this->colors[0], this->colors[1], this->colors[2]);
     glColor4ub(this->R, this->G, this->B, this->A);
     glTranslated(this->position->x, this->position->y, this->position->z);
     glRotated(this->yAngle, 0, 1, 0);
@@ -51,6 +51,7 @@ void Rect::draw(GLuint* textureIds) {
     glEnd();
     // glRectd(-this->width / 2.0, -this->height / 2.0, this->width / 2.0, this->height / 2.0);
   glPopMatrix();
+  if (this->textureId == -1) glEnable(GL_TEXTURE_2D);
 }
 
 void Rect::print() {

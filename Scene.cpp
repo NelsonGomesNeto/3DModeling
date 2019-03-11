@@ -43,14 +43,14 @@ struct Pack {
 };
 void Scene::draw(Vector *observerPosition, GLuint* textureIds) {
   for (Rect *rectangle: this->rectangles) if (rectangle->A == 255) rectangle->draw(textureIds);
-  for (Triangle *triangle: this->triangles) if (triangle->A == 255) triangle->draw();
+  for (Triangle *triangle: this->triangles) if (triangle->A == 255) triangle->draw(textureIds);
 
   vector<Pack> toDraw;
   for (Rect *rectangle: this->rectangles) if (rectangle->A < 255) toDraw.push_back({rectangle->distanceTo(observerPosition), rectangle, nullptr});
   for (Triangle *triangle: this->triangles) if (triangle->A < 255) toDraw.push_back({triangle->distanceTo(observerPosition), nullptr, triangle});
   sort(toDraw.begin(), toDraw.end());
 
-  for (Pack &p: toDraw) if (p.rectangle == nullptr) p.triangle->draw(); else p.rectangle->draw(textureIds);
+  for (Pack &p: toDraw) if (p.rectangle == nullptr) p.triangle->draw(textureIds); else p.rectangle->draw(textureIds);
 
   // for (Rect *rectangle: this->rectangles) {
   //   rectangle->draw();

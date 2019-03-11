@@ -24,8 +24,8 @@ void Camera::getMovements(bool keyboard[256], Vector *mouse) {
   // intended->y -= 0.05;
 
 
-  //this->pFloor->checkHitBoxes(intended);
-  //if (!this->pWall->checkHitBoxes(intended, this->position))
+//  this->pFloor->checkHitBoxes(intended);
+//  if (!this->pWall->checkHitBoxes(intended, this->position))
     this->position = intended;
 
   if (keyboard['q']) { this->angle->y += mouse->x / 50.0, mouse->x /= 1.2; }

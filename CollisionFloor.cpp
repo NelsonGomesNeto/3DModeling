@@ -19,17 +19,17 @@ void CollisionFloor::drawFloorPolygons() {
 
 void CollisionFloor::buildFloor() {
   vector<Vector*> v;
-  v.push_back(new Vector(-20, 0, 20));
-  v.push_back(new Vector(20, 0, 20));
-  v.push_back(new Vector(20, 0, -20));
-  v.push_back(new Vector(-20, 0, -20));
-  Polygon *p = new Polygon(v);
-  this->addFloorPolygon(p);
-  v.clear();
-  v.push_back(new Vector(10, 0, 10));
-  v.push_back(new Vector(10, 5, 15));
-  v.push_back(new Vector(5, 5, 15));
-  v.push_back(new Vector(5, 0, 10));
+//  v.push_back(new Vector(-20, 0, 20));
+//  v.push_back(new Vector(20, 0, 20));
+//  v.push_back(new Vector(20, 0, -20));
+//  v.push_back(new Vector(-20, 0, -20));
+//  Polygon *p = new Polygon(v);
+//  this->addFloorPolygon(p);
+//  v.clear();
+  v.push_back(new Vector(-28, 5, 15));
+  v.push_back(new Vector(-28, 0, 10));
+  v.push_back(new Vector(-38, 0, 10));
+  v.push_back(new Vector(-38, 5, 15));
   this->addFloorPolygon(new Polygon(v));
 }
 
