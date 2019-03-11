@@ -3,7 +3,6 @@
     #include <windows.h>
   #endif
 #endif
-#undef RECT
 #include <stdio.h>
 #include <algorithm>
 #include <math.h>
@@ -45,9 +44,7 @@ void update(int value) {
   glutTimerFunc(10, update, 1);
   camera->getMovements(keyboard, mouse);
   camera->update();
-  //scene->loadScene(keyboard);
   scene->getMovements(keyboard);
-  // scratchRectangle->print();
   glutPostRedisplay();
 }
 
@@ -146,6 +143,11 @@ void init() {
     glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
     glShadeModel(GL_SMOOTH);
   }
+
+  // glEnable(GL_TEXTURE_2D);
+  // const GLvoid *data = fopen("Textures/wall.jpg", "r");
+  // glTexImage2D(GL_TEXTURE_2D, 0, 1, 1299, 1300, 0, GL_RGBA, GL_INT, data);
+  // fclose(data);
 
   glMatrixMode(GL_PROJECTION);
   gluPerspective(65, (double) screenWidth / screenHeight, 0.01, 300);
