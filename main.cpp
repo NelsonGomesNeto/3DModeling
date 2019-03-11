@@ -13,7 +13,7 @@
 #include "Scene.hpp"
 #include "Rect.hpp"
 #include "Textures/textureLoader.hpp"
-#include "Doorr.hpp"
+#include "Door.hpp"
 #include <GL/freeglut.h>
 using namespace std;
 int screenWidth = 800, screenWidthDiv2 = 400, screenHeight = 800, screenHeightDiv2 = 400;
@@ -163,7 +163,7 @@ int main(int argc, char **argv) {
   floors->buildFloor();
   walls->buildWalls();
   camera = new Camera(new Vector(0, 1, 0), floors, walls);
-  door = new Doorr(camera);
+  door = new Doorr(&(camera->position));
   mouse = new Vector(0, 0, 0);
   scene = new Scene();
 

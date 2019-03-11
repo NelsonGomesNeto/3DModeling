@@ -3,19 +3,19 @@
 //
 
 #include <GL/glut.h>
-#include "Doorr.hpp"
+#include <cstdio>
+#include "Door.hpp"
 #include "Vector.hpp"
-#include "Camera.hpp"
 
-Doorr::Doorr(void *camera) {
-  this->camera = camera;
+Doorr::Doorr(Vector **pVector) {
+  this->pos = pVector;
 }
 
 void Doorr::draw() {
   glPushMatrix();
   glTranslated(-4, 8, -1.6);
   glPushMatrix();
-  glRotated(-angle, 0, 1, 0);
+  glRotated(angle, 0, 1, 0);
   glBegin(GL_QUADS);
   glVertex3d(0, 0, 0.05);
   glVertex3d(0, -8, 0.05);
@@ -24,11 +24,13 @@ void Doorr::draw() {
   glEnd();
   glPopMatrix();
   glPushMatrix();
+  glTranslated(0, 0, 3.15);
+  glRotated(-angle, 0, 1, 0);
   glBegin(GL_QUADS);
-  glVertex3d(0, 0, 1.6);
-  glVertex3d(0, -8, 1.6);
-  glVertex3d(0, -8, 3.15);
-  glVertex3d(0, 0, 3.15);
+  glVertex3d(0, 0, -1.6);
+  glVertex3d(0, -8, -1.6);
+  glVertex3d(0, -8, 0);
+  glVertex3d(0, 0, 0);
   glEnd();
   glPopMatrix();
   glPopMatrix();
@@ -48,7 +50,8 @@ void Doorr::update() {
 }
 
 bool Doorr::cameraIsInsideRange() {
-  auto *cam = (Camera*) this->camera;
-  Vector* pos = cam->position;
-  return pos->x < -3 && pos->x > -5 && pos->y > 3 && pos->y < 7 && pos->z < 1.6 && pos->z > -1.6;
+  Vector* pos = *this->pos;
+  return pos->x < 0 && pos->x > -8 && pos->y > 3 && pos->y < 7 && pos->z < 1.6 && pos->z > -1.6;
 }
+
+

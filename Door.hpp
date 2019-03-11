@@ -6,17 +6,18 @@
 #define INC_3DMODELING_DOOR_HPP
 
 
+#include "Vector.hpp"
 
 class Doorr {
 private:
   int state = 0;
   int angle = 0;
-  void* camera;
+  Vector** pos;
   bool cameraIsInsideRange();
 public:
-  explicit Doorr(void* camera);
   void draw();
   void update();
+  explicit Doorr(Vector **pVector);
 };
 
 
