@@ -43,17 +43,17 @@ void Rect::draw(GLuint* textureIds) {
     glTranslated(this->position->x, this->position->y, this->position->z);
     glRotated(this->yAngle, 0, 1, 0);
     glRotated(this->xAngle, 1, 0, 0);
-    double pieces = 25;
+    double pieces = 50;
     double w = this->width / pieces, h = this->height / pieces;
+    glBegin(GL_QUADS);
     for (double i = 0; i < pieces; i ++)
       for (double j = 0; j < pieces; j ++) {
-        glBegin(GL_QUAD_STRIP);
-          glTexCoord2d(0, 1); glVertex3d(-this->width / 2.0 + j*w, -this->height / 2.0 + (i+1)*h, 0);
-          glTexCoord2d(1, 1); glVertex3d(-this->width / 2.0 + (j+1)*w, -this->height / 2.0 + (i+1)*h, 0);
-          glTexCoord2d(0, 0); glVertex3d(-this->width / 2.0 + j*w, -this->height / 2.0 + i*h, 0);
           glTexCoord2d(1, 0); glVertex3d(-this->width / 2.0 + (j+1)*w, -this->height / 2.0 + i*h, 0);
-        glEnd();
+          glTexCoord2d(1, 1); glVertex3d(-this->width / 2.0 + (j+1)*w, -this->height / 2.0 + (i+1)*h, 0);
+          glTexCoord2d(0, 1); glVertex3d(-this->width / 2.0 + j*w, -this->height / 2.0 + (i+1)*h, 0);
+          glTexCoord2d(0, 0); glVertex3d(-this->width / 2.0 + j*w, -this->height / 2.0 + i*h, 0);
       }
+    glEnd();
     // glRectd(-this->width / 2.0, -this->height / 2.0, this->width / 2.0, this->height / 2.0);
   glPopMatrix();
   if (this->textureId == -1) glEnable(GL_TEXTURE_2D);
