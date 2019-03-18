@@ -18,7 +18,7 @@
 using namespace std;
 int screenWidth = 800, screenWidthDiv2 = 400, screenHeight = 800, screenHeightDiv2 = 400;
 #define FLOOR_DEBUG if(0)
-#define LIGHTS if(0)
+#define LIGHTS if(1)
 #define CURSOR_BALL if(1)
 #define GRID if(0)
 Camera *camera;
@@ -88,12 +88,12 @@ void lightsSetup() {
   GLfloat materialSpecular[] = {1, 1, 1, 1};
   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, materialSpecular); // Defines objects reflection to specular light
   glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128); // Defines objects level of reflection (0 to 128)
-  GLfloat lightAmbient[] = {0, 0, 0, 1}; glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
+  GLfloat lightAmbient[] = {0.2, 0.2, 0.2, 1}; glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
   GLfloat lightDiffuse[] = {0.8, 0.8, 0.8, 1}; glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
   GLfloat lightSpecular[] = {1, 1, 1, 1}; glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular);
   GLfloat lightSpotCutoff = 10 + mouse->z; glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, lightSpotCutoff);
-  glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.1);
-  GLfloat lightPosition[] = {(GLfloat) camera->position->x, (GLfloat) camera->position->y, (GLfloat) camera->position->z, 1};
+  // glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.1);
+  GLfloat lightPosition[] = {(GLfloat) camera->position->x, (GLfloat) camera->position->y + 1, (GLfloat) camera->position->z, 1};
   glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
   GLfloat lightSpotDirection[] = {(GLfloat) camera->eyeDirection->x, (GLfloat) camera->eyeDirection->y, (GLfloat) camera->eyeDirection->z};
   glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightSpotDirection);
