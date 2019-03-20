@@ -1,4 +1,5 @@
 #include "Rect.hpp"
+#include "Vector.hpp"
 #include <stdio.h>
 #include <math.h>
 #include<algorithm>
@@ -38,25 +39,37 @@ void Rect::getMovements(bool keyboard[256]) {
 void Rect::draw(GLuint* textureIds) {
   if (this->textureId > -1) glBindTexture(GL_TEXTURE_2D, textureIds[this->textureId]);
   else glDisable(GL_TEXTURE_2D);
+  glDisable(GL_TEXTURE_2D);
   glPushMatrix();
     glColor4ub(this->R, this->G, this->B, this->A);
     glTranslated(this->position->x, this->position->y, this->position->z);
     glRotated(this->yAngle, 0, 1, 0);
     glRotated(this->xAngle, 1, 0, 0);
-    double pieces = 50;
+    double pieces = 25;
     double w = this->width / pieces, h = this->height / pieces;
     glBegin(GL_QUADS);
     for (double i = 0; i < pieces; i ++)
       for (double j = 0; j < pieces; j ++) {
-          glTexCoord2d(1, 0); glVertex3d(-this->width / 2.0 + (j+1)*w, -this->height / 2.0 + i*h, 0);
-          glTexCoord2d(1, 1); glVertex3d(-this->width / 2.0 + (j+1)*w, -this->height / 2.0 + (i+1)*h, 0);
-          glTexCoord2d(0, 1); glVertex3d(-this->width / 2.0 + j*w, -this->height / 2.0 + (i+1)*h, 0);
-          glTexCoord2d(0, 0); glVertex3d(-this->width / 2.0 + j*w, -this->height / 2.0 + i*h, 0);
+        glNormal3d(0, 0, 1); glTexCoord2d(1, 0); glVertex3d(-this->width / 2.0 + (j+1)*w, -this->height / 2.0 + i*h, 0);
+        glNormal3d(0, 0, 1); glTexCoord2d(1, 1); glVertex3d(-this->width / 2.0 + (j+1)*w, -this->height / 2.0 + (i+1)*h, 0);
+        glNormal3d(0, 0, 1); glTexCoord2d(0, 1); glVertex3d(-this->width / 2.0 + j*w, -this->height / 2.0 + (i+1)*h, 0);
+        glNormal3d(0, 0, 1); glTexCoord2d(0, 0); glVertex3d(-this->width / 2.0 + j*w, -this->height / 2.0 + i*h, 0);
       }
     glEnd();
-    // glRectd(-this->width / 2.0, -this->height / 2.0, this->width / 2.0, this->height / 2.0);
+    // glPushMatrix();
+    // for (double i = 0; i < pieces; i ++)
+    //   for (double j = 0; j < pieces; j ++)
+    //   {
+    //     glPushMatrix();
+    //       glTranslated(-this->width / 2.0 + (j+0.5)*w, -this->height / 2.0 + (i+0.5)*h, 0);
+    //       glutSolidCube(max(w, h));
+    //     glPopMatrix();
+    //   }
+    //     // glRectd(-this->width / 2.0 + j*w, -this->height / 2.0 + i*h, -this->width / 2.0 + (j+1)*w, -this->height / 2.0 + (i+1)*h);
+    // glPopMatrix();
   glPopMatrix();
   if (this->textureId == -1) glEnable(GL_TEXTURE_2D);
+  glEnable(GL_TEXTURE_2D);
 }
 
 void Rect::print() {

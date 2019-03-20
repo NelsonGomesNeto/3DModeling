@@ -92,7 +92,7 @@ void lightsSetup() {
   GLfloat lightDiffuse[] = {0.8, 0.8, 0.8, 1}; glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
   GLfloat lightSpecular[] = {1, 1, 1, 1}; glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular);
   GLfloat lightSpotCutoff = 10 + mouse->z; glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, lightSpotCutoff);
-  // glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.1);
+  glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.1);
   GLfloat lightPosition[] = {(GLfloat) camera->position->x, (GLfloat) camera->position->y + 1, (GLfloat) camera->position->z, 1};
   glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
   GLfloat lightSpotDirection[] = {(GLfloat) camera->eyeDirection->x, (GLfloat) camera->eyeDirection->y, (GLfloat) camera->eyeDirection->z};
@@ -153,7 +153,7 @@ void display() {
 void reshape(int width, int height) {
   screenWidth = width, screenHeight = max(1, height);
   screenWidthDiv2 = screenWidth >> 1, screenHeightDiv2 = screenHeight >> 1;
-  
+
   glViewport(0, 0, screenWidth, screenHeight);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
