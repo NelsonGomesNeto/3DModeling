@@ -45,11 +45,12 @@ void Rect::draw(GLuint* textureIds) {
     glTranslated(this->position->x, this->position->y, this->position->z);
     glRotated(this->yAngle, 0, 1, 0);
     glRotated(this->xAngle, 1, 0, 0);
-    double pieces = 25;
-    double w = this->width / pieces, h = this->height / pieces;
+    double mult = 5;
+    double wPieces = this->width * mult, hPieces = this->height * mult;
+    double w = this->width / wPieces, h = this->height / hPieces;
     glBegin(GL_QUADS);
-    for (double i = 0; i < pieces; i ++)
-      for (double j = 0; j < pieces; j ++) {
+    for (double i = 0; i < hPieces; i ++)
+      for (double j = 0; j < wPieces; j ++) {
         glNormal3d(0, 0, 1); glTexCoord2d(1, 0); glVertex3d(-this->width / 2.0 + (j+1)*w, -this->height / 2.0 + i*h, 0);
         glNormal3d(0, 0, 1); glTexCoord2d(1, 1); glVertex3d(-this->width / 2.0 + (j+1)*w, -this->height / 2.0 + (i+1)*h, 0);
         glNormal3d(0, 0, 1); glTexCoord2d(0, 1); glVertex3d(-this->width / 2.0 + j*w, -this->height / 2.0 + (i+1)*h, 0);
