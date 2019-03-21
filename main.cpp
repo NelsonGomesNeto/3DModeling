@@ -17,7 +17,7 @@
 #include <GL/freeglut.h>
 using namespace std;
 int screenWidth = 800, screenWidthDiv2 = 400, screenHeight = 800, screenHeightDiv2 = 400;
-#define FLOOR_DEBUG if(0)
+#define FLOOR_DEBUG if(1)
 #define LIGHTS if(1)
 #define CURSOR_BALL if(1)
 #define GRID if(0)
@@ -27,7 +27,6 @@ Wall* walls;
 Scene *scene;
 Doorr* door;
 GLuint textureIds[10000];
-//Rect *scratchRectangle;
 const double pi = acos(-1);
 double radToDeg(double a) { return(a * 180 / pi); }
 
