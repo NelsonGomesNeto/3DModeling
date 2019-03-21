@@ -42,13 +42,15 @@ struct Pack {
   bool operator<(const Pack &a) const { return(dist > a.dist); }
 };
 void Scene::draw(Vector *observerPosition, GLuint* textureIds) {
-  for (Rect *rectangle: this->rectangles) if (rectangle->A == 255) rectangle->draw(textureIds);
-  for (Triangle *triangle: this->triangles) if (triangle->A == 255) triangle->draw(textureIds);
+  int notOpaqueAmount = 0;
+  for (Rect *rectangle: this->rectangles) if (rectangle->A == 255) rectangle->draw(textureIds); else notOpaqueAmount ++;
+  for (Triangle *triangle: this->triangles) if (triangle->A == 255) triangle->draw(textureIds); else notOpaqueAmount ++;
 
-  vector<Pack> toDraw;
-  for (Rect *rectangle: this->rectangles) if (rectangle->A < 255) toDraw.push_back({rectangle->distanceTo(observerPosition), rectangle, nullptr});
-  for (Triangle *triangle: this->triangles) if (triangle->A < 255) toDraw.push_back({triangle->distanceTo(observerPosition), nullptr, triangle});
-  sort(toDraw.begin(), toDraw.end());
+  Pack toDraw[notOpaqueAmount]; int i = 0;
+  for (Rect *rectangle: this->rectangles) if (rectangle->A < 255) toDraw[i ++] = {rectangle->distanceTo(observerPosition), rectangle, nullptr};
+  for (Triangle *triangle: this->triangles) if (triangle->A < 255) toDraw[i ++] = {triangle->distanceTo(observerPosition), nullptr, triangle};
+  // sort(toDraw.begin(), toDraw.end());
+  sort(toDraw, toDraw+notOpaqueAmount);
 
   for (Pack &p: toDraw) if (p.rectangle == nullptr) p.triangle->draw(textureIds); else p.rectangle->draw(textureIds);
 
