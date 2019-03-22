@@ -17,6 +17,7 @@ public:
   void operator+=(const Vector &a);
   void operator-=(const Vector &a);
   Vector* operator-(const Vector &a);
+  Vector* operator-();
   Vector* operator+(const Vector &a);
   Vector *copy();
   Vector *cross(Vector *pVector);

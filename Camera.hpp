@@ -7,7 +7,7 @@
 class Camera {
 public:
   Camera(Vector *pVector, CollisionFloor *pFloor, Wall *pWall);
-  Vector *position, *angle, *forwardDirection, *rightDirection, *eyeDirection;
+  Vector *position, *angle, *forwardDirection, *rightDirection, *eyeDirection, *movementDirection;
   double maxSpeed;
   void getMovements(bool keyboard[256], Vector *mouse);
   void update();

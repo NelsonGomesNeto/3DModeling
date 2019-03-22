@@ -68,7 +68,11 @@ Vector* Vector::operator-(const Vector &a) {
   return new Vector(this->x - a.x, this->y - a.y, this->z - a.z);
 }
 
-Vector *Vector::operator+(const Vector &a) {
+Vector* Vector::operator-() {
+  return new Vector(-this->x, -this->y, -this->z);
+}
+
+Vector* Vector::operator+(const Vector &a) {
   return new Vector(this->x + a.x, this->y + a.y, this->z + a.z);
 }
 

@@ -12,7 +12,7 @@ public:
   void drawFloorPolygons();
   void buildFloor();
 
-  bool checkHitBoxes(Vector *pVector);
+  bool checkHitBoxes(Vector *pVector, Vector *original);
 };
 
 #endif //FLOOR_H

@@ -90,7 +90,7 @@ void lightsSetup() {
   GLfloat lightAmbient[] = {0.2, 0.2, 0.2, 1}; glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
   GLfloat lightDiffuse[] = {0.8, 0.8, 0.8, 1}; glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
   GLfloat lightSpecular[] = {1, 1, 1, 1}; glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular);
-  GLfloat lightSpotCutoff = 10 + mouse->z; glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, lightSpotCutoff);
+  GLfloat lightSpotCutoff = 20 + mouse->z; glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, lightSpotCutoff);
   glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.1);
   GLfloat lightPosition[] = {(GLfloat) camera->position->x, (GLfloat) camera->position->y + 1, (GLfloat) camera->position->z, 1};
   glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
@@ -204,7 +204,7 @@ int main(int argc, char **argv) {
   walls = new Wall();
   floors->buildFloor();
   walls->buildWalls();
-  camera = new Camera(new Vector(-24, 1, 0), floors, walls);
+  camera = new Camera(new Vector(-24, 0, 0), floors, walls);
   door = new Doorr(&(camera->position));
   mouse = new Vector(0, 0, 0);
   scene = new Scene();

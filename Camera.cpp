@@ -5,28 +5,32 @@
 Camera::Camera(Vector *p, CollisionFloor *pFloor, Wall *pWall) {
   this->position = p;
   this->angle = new Vector(0, 0, 0);
-  this->forwardDirection = new Vector(0, 0, 0.1), this->rightDirection = new Vector(0.1, 0, 0), this->eyeDirection = new Vector(0, 0, 0.1);
+  this->forwardDirection = new Vector(0, 0, 0.1), this->rightDirection = new Vector(0.1, 0, 0), this->eyeDirection = new Vector(0, 0, 0.1), this->movementDirection = new Vector(0, 0, 0);
   this->maxSpeed = 0.1;
   this->pFloor = pFloor;
   this->pWall = pWall;
 }
 
 void Camera::getMovements(bool keyboard[256], Vector *mouse) {
+  this->movementDirection->set(0, 0, 0);
   Vector* intended = position->copy();
-  if (keyboard['w']) *intended += *this->forwardDirection;
-  if (keyboard['s']) *intended -= *this->forwardDirection;
-  if (keyboard['a']) *intended += *this->rightDirection;
-  if (keyboard['d']) *intended -= *this->rightDirection;
-  if (keyboard['W']) *intended += *this->forwardDirection->div(40);
-  if (keyboard['S']) *intended -= *this->forwardDirection->div(40);
-  if (keyboard['A']) *intended += *this->rightDirection->div(40);
-  if (keyboard['D']) *intended -= *this->rightDirection->div(40);
-  // intended->y -= 0.05;
+  if (keyboard['w']) *this->movementDirection += *this->forwardDirection;
+  if (keyboard['s']) *this->movementDirection -= *this->forwardDirection;
+  if (keyboard['a']) *this->movementDirection += *this->rightDirection;
+  if (keyboard['d']) *this->movementDirection -= *this->rightDirection;
+  if (keyboard['W']) *this->movementDirection += *this->forwardDirection->div(40);
+  if (keyboard['S']) *this->movementDirection -= *this->forwardDirection->div(40);
+  if (keyboard['A']) *this->movementDirection += *this->rightDirection->div(40);
+  if (keyboard['D']) *this->movementDirection -= *this->rightDirection->div(40);
+  if (this->movementDirection->magSquared())
+    this->movementDirection->normalize()->mult(this->maxSpeed);
+  if (keyboard['W'] || keyboard['S'] || keyboard['A'] || keyboard['D'])
+    this->movementDirection->div(40);
+  *intended += *this->movementDirection;
 
-
- this->pFloor->checkHitBoxes(intended);
- if (!this->pWall->checkHitBoxes(intended, this->position))
-    this->position = intended;
+  this->pFloor->checkHitBoxes(intended, this->position);
+  this->pWall->checkHitBoxes(intended, this->position);
+  this->position = intended;
 
   if (keyboard['q']) { this->angle->y += mouse->x / 50.0, mouse->x /= 1.2; }
   if (keyboard['e']) { this->angle->y += mouse->x / 50.0, mouse->x /= 1.2; }
