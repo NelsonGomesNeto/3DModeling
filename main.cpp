@@ -17,7 +17,7 @@
 #include <GL/freeglut.h>
 using namespace std;
 int screenWidth = 800, screenWidthDiv2 = 400, screenHeight = 800, screenHeightDiv2 = 400;
-#define FLOOR_DEBUG if(1)
+#define FLOOR_DEBUG if(0)
 #define LIGHTS if(1)
 #define CURSOR_BALL if(1)
 #define GRID if(0)
@@ -87,15 +87,24 @@ void lightsSetup() {
   GLfloat materialSpecular[] = {1, 1, 1, 1};
   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, materialSpecular); // Defines objects reflection to specular light
   glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128); // Defines objects level of reflection (0 to 128)
-  GLfloat lightAmbient[] = {0.2, 0.2, 0.2, 1}; glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
-  GLfloat lightDiffuse[] = {0.8, 0.8, 0.8, 1}; glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
-  GLfloat lightSpecular[] = {1, 1, 1, 1}; glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular);
-  GLfloat lightSpotCutoff = 20 + mouse->z; glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, lightSpotCutoff);
-  glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.1);
+
+  GLfloat lightAmbient0[] = {0.2, 0.2, 0.2, 1}; glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient0);
+  GLfloat lightDiffuse0[] = {0.8, 0.8, 0.8, 1}; glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse0);
+  GLfloat lightSpecular0[] = {1, 1, 1, 0.5}; glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular0);
+  GLfloat lightSpotCutoff0 = 40 + mouse->z; glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, lightSpotCutoff0);
+  // glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, 1);
   GLfloat lightPosition[] = {(GLfloat) camera->position->x, (GLfloat) camera->position->y + 1, (GLfloat) camera->position->z, 1};
   glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
   GLfloat lightSpotDirection[] = {(GLfloat) camera->eyeDirection->x, (GLfloat) camera->eyeDirection->y, (GLfloat) camera->eyeDirection->z};
   glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightSpotDirection);
+
+  GLfloat lightAmbient1[] = {0, 0, 0, 0}; glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmbient1);
+  GLfloat lightDiffuse1[] = {0, 0, 0, 0}; glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDiffuse1);
+  GLfloat lightSpecular1[] = {1, 1, 1, 1}; glLightfv(GL_LIGHT1, GL_SPECULAR, lightSpecular1);
+  GLfloat lightSpotCutoff1 = 20 + mouse->z; glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, lightSpotCutoff1);
+  // glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 1);
+  glLightfv(GL_LIGHT1, GL_POSITION, lightPosition);
+  glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, lightSpotDirection);
 }
 
 void display() {
@@ -166,7 +175,7 @@ void init() {
 
   LIGHTS {
     glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT0); //glEnable(GL_LIGHT1);
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
     glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);

@@ -1,7 +1,4 @@
-//
-// Created by Lucas Amorim on 3/9/2019.
-//
-
+#include <math.h>
 #include <stdexcept>
 #include "CollisionWall.hpp"
 
@@ -32,13 +29,13 @@ void Wall::buildWalls() {
   while (objects --)
   {
     fscanf(filePtr, "%c", &comment);
-    if (comment == '/') while (fscanf(filePtr, "%c", &end) && end != '\n'); 
+    if (comment == '/') while (fscanf(filePtr, "%c", &end) && end != '\n');
     else fseek(filePtr, -1, SEEK_CUR);
     double x, y, z, xAngle, yAngle, width, height; int R, G, B, A, textureId;
     fscanf(filePtr, "%lf %lf %lf %lf %lf %lf %lf %d %d %d %d %d\n", &x, &y, &z, &xAngle, &yAngle, &width, &height, &R, &G, &B, &A, &textureId);
     Vector *w = new Vector(1, 0, 0), *h = new Vector(0, 1, 0), *p = new Vector(x, y, z);
     double pi = 3.141592653589793;
-    if ((abs(xAngle) > 10 && abs(xAngle) < 170) || (abs(xAngle) > 190 && abs(xAngle) < 350)) continue;
+    if ((fabs(xAngle) > 10 && fabs(xAngle) < 170) || (fabs(xAngle) > 190 && fabs(xAngle) < 350)) continue;
     w->rotateX(xAngle * pi / 180.0), h->rotateX(xAngle * pi / 180.0);
     w->rotateY(yAngle * pi / 180.0), h->rotateY(yAngle * pi / 180.0);
     w->mult(width / 2.0), h->mult(height / 2.0);

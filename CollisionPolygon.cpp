@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdexcept>
 #include "CollisionPolygon.hpp"
 #include "Vector.hpp"
@@ -99,21 +100,21 @@ void Polygon::draw() {
 double Polygon::heightAt(Vector *pVector) {
   // ax + by + cz + d = 0
   // y = -(ax + cz + d) / b
-  if (abs(this->b) < 1e-6) return(pVector->y);
+  if (fabs(this->b) < 1e-6) return(pVector->y);
   return (-(this->a * pVector->x + this->c * pVector->z + this->d) / this->b);
 }
 
 double Polygon::zDistAt(Vector *pVector) {
   // ax + by + cz + d = 0
   // z = -(ax + by + d) / c
-  if (abs(this->c) < 1e-6) return(pVector->z);
+  if (fabs(this->c) < 1e-6) return(pVector->z);
   return (-(this->a * pVector->x + this->b * pVector->y + this->d) / this->c);
 }
 
 double Polygon::xDistAt(Vector *pVector) {
   // ax + by + cz + d = 0
   // x = -(by + cz + d) / a
-  if (abs(this->a) < 1e-6) return(pVector->x);
+  if (fabs(this->a) < 1e-6) return(pVector->x);
   return (-(this->b * pVector->y + this->c * pVector->z + this->d) / this->a);
 }
 
@@ -151,7 +152,7 @@ bool Polygon::handleCollision(Vector *pVector, Vector *original) {
           && this->minUpperZ <= pVector->z && pVector->z <= this->maxUpperZ) {
       double floorHeight = this->heightAt(pVector);
       // printf("%f\n", floorHeight);
-      pVector->y = floorHeight + this->distVector->y;
+      pVector->y = floorHeight;// + this->distVector->y;
       return true;
     }
 
@@ -160,11 +161,9 @@ bool Polygon::handleCollision(Vector *pVector, Vector *original) {
         && this->minLowerZ <= pVector->z && pVector->z <= this->maxLowerZ) {
       // inside lower hitbox, we need to snap pVector to the y coordinate of this floor
       double floorHeight = this->heightAt(pVector);
-      pVector->y = floorHeight - this->distVector->y;
+      pVector->y = floorHeight;// - this->distVector->y;
       return true;
     }
     return false;
   }
 }
-
-
