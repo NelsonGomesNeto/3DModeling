@@ -43,7 +43,8 @@ void Camera::getMovements(bool keyboard[256], Vector *mouse) {
   if (keyboard['P']) mouse->z -= 0.1;
   // printf("%lf\n", mouse->z);
 
-  if (keyboard['2']) printf("(%8.3lf, %8.3lf, %8.3lf)\n", this->position->x + this->eyeDirection->x*2, this->position->y + 1 + this->eyeDirection->y*2, this->position->z + this->eyeDirection->z*2);
+  // if (keyboard['2']) printf("(%8.3lf, %8.3lf, %8.3lf)\n", this->position->x + this->eyeDirection->x*2, this->position->y + 1 + this->eyeDirection->y*2, this->position->z + this->eyeDirection->z*2);
+  if (keyboard['2']) printf("(%8.3lf, %.15lf, %8.3lf)\n", this->position->x, this->position->y, this->position->z);
 }
 
 void Camera::update() {

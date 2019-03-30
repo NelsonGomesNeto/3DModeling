@@ -46,15 +46,23 @@ void Rect::draw(GLuint* textureIds) {
     double mult = 5;
     double wPieces = ceil(this->width * mult), hPieces = ceil(this->height * mult);
     double w = this->width / wPieces, bw = -this->width / 2.0, h = this->height / hPieces, bh = -this->height / 2.0;
+    double ph = 1 / hPieces, pw = 1 / wPieces;
+    // if (this->height == 0.22) printf("%lf %lf || %lf %lf || %lf %lf\n", pw, hPieces, ph, wPieces, w, h);
     glBegin(GL_QUADS);
       for (double i = 0; i < hPieces; i ++)
         for (double j = 0; j < wPieces; j ++) {
-          glNormal3d(0, 0, 1); glTexCoord2d(1, 0); glVertex3d(bw + (j+1)*w, bh + i*h, 0);
-          glNormal3d(0, 0, 1); glTexCoord2d(1, 1); glVertex3d(bw + (j+1)*w, bh + (i+1)*h, 0);
-          glNormal3d(0, 0, 1); glTexCoord2d(0, 1); glVertex3d(bw + j*w, bh + (i+1)*h, 0);
-          glNormal3d(0, 0, 1); glTexCoord2d(0, 0); glVertex3d(bw + j*w, bh + i*h, 0);
+          glNormal3d(0, 0, 1); glTexCoord2d((j+1)*pw+0.03, i*ph); glVertex3d(bw + (j+1)*w, bh + i*h, 0);
+          glNormal3d(0, 0, 1); glTexCoord2d((j+1)*pw+0.03, (i+1)*ph); glVertex3d(bw + (j+1)*w, bh + (i+1)*h, 0);
+          glNormal3d(0, 0, 1); glTexCoord2d(j*pw+0.03, (i+1)*ph); glVertex3d(bw + j*w, bh + (i+1)*h, 0);
+          glNormal3d(0, 0, 1); glTexCoord2d(j*pw+0.03, i*ph); glVertex3d(bw + j*w, bh + i*h, 0);
         }
     glEnd();
+    // glBegin(GL_QUADS);
+    //   glNormal3d(0, 0, 1); glTexCoord2d(1.03, 0); glVertex3d(-bw, bh, 0);
+    //   glNormal3d(0, 0, 1); glTexCoord2d(1.03, 1); glVertex3d(-bw, -bh, 0);
+    //   glNormal3d(0, 0, 1); glTexCoord2d(0.03, 1); glVertex3d(bw, -bh, 0);
+    //   glNormal3d(0, 0, 1); glTexCoord2d(0.03, 0); glVertex3d(bw, bh, 0);
+    // glEnd();
   glPopMatrix();
   if (this->textureId == -1) glEnable(GL_TEXTURE_2D);
 }

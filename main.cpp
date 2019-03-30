@@ -17,7 +17,7 @@
 #include <GL/freeglut.h>
 using namespace std;
 int screenWidth = 800, screenWidthDiv2 = 400, screenHeight = 800, screenHeightDiv2 = 400;
-#define FLOOR_DEBUG if(0)
+#define FLOOR_DEBUG if(1)
 #define LIGHTS if(1)
 #define CURSOR_BALL if(1)
 #define GRID if(0)
@@ -120,13 +120,10 @@ void display() {
 
     GRID drawGrid();
     FLOOR_DEBUG {
-      floors->drawFloorPolygons();
-      walls->drawWallPolygons();
+      // floors->drawFloorPolygons();
+      // walls->drawWallPolygons();
     }
-//    glPushMatrix();
-//    glTranslated(0, 11, 0);
-//    glColor3ub(255, 255, 255); glutSolidSphere(0.5, 10, 10);
-//    glPopMatrix();
+
     scene->draw(camera->position, textureIds);
     door->draw();
 
@@ -182,22 +179,14 @@ void init() {
     glShadeModel(GL_SMOOTH);
   }
 
-  GLuint texture = loadTexture("Textures/wall.bmp", 1024, 1024);
-  textureIds[0] = texture;
-  texture = loadTexture("Textures/window.bmp", 350, 346);
-  textureIds[1] = texture;
-  texture = loadTexture("Textures/atari.bmp", 500, 359);
-  textureIds[2] = texture;
-  texture = loadTexture("Textures/keypad.bmp", 582, 674);
-  textureIds[3] = texture;
-  texture = loadTexture("Textures/radio.bmp", 482, 231);
-  textureIds[4] = texture;
-  texture = loadTexture("Textures/keyboard.bmp", 612, 292);
-  textureIds[5] = texture;
-  texture = loadTexture("Textures/floor.bmp", 225, 225);
-  textureIds[6] = texture;
+  textureIds[0] = loadTexture("Textures/wall.bmp", 1024, 1024);
+  textureIds[1] = loadTexture("Textures/window.bmp", 343, 343);
+  textureIds[2] = loadTexture("Textures/atari.bmp", 500, 359);
+  textureIds[3] = loadTexture("Textures/keypad.bmp", 582, 674);
+  textureIds[4] = loadTexture("Textures/radio.bmp", 482, 231);
+  textureIds[5] = loadTexture("Textures/keyboard.bmp", 612, 292);
+  textureIds[6] = loadTexture("Textures/floor.bmp", 225, 225);
   glEnable(GL_TEXTURE_2D);
-  glBindTexture(GL_TEXTURE_2D, textureIds[0]);
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

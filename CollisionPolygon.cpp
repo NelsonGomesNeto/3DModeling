@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include "CollisionPolygon.hpp"
 #include "Vector.hpp"
-#include <GL/glut.h>
+#include <GL/freeglut.h>
 
 #define FLOOR_HITBOX_SIZE 0.2
 #define WALL_HITBOX_SIZE 0.2
@@ -83,7 +83,7 @@ void Polygon::draw() {
   }
   glEnd();
   glPointSize(10);
-  glColor3ub(255, 127, 0);
+  glColor3ub(100, 100, 255);
   glBegin(GL_POINTS);
   for (auto v: this->lowerHitBox) {
     glVertex3d(v->x, v->y, v->z);

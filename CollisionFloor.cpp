@@ -35,7 +35,7 @@ void CollisionFloor::buildFloor() {
   v.push_back(new Vector(-6, 4, -3));
   this->addFloorPolygon(new Polygon(v));
 
-  FILE *filePtr = fopen("scene", "rb+");
+  FILE *filePtr = fopen("floors", "rb+");
   int objects; fscanf(filePtr, "%d", &objects);
   char end, comment; while (fscanf(filePtr, "%c", &end) && end != '\n');
   while (objects --)
