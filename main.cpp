@@ -11,6 +11,7 @@
 #include "CollisionWall.hpp"
 #include "Camera.hpp"
 #include "Scene.hpp"
+#include "Light.hpp"
 #include "Rect.hpp"
 #include "Textures/textureLoader.hpp"
 #include "Door.hpp"
@@ -26,6 +27,7 @@ CollisionFloor* floors;
 Wall* walls;
 Scene *scene;
 Doorr* door;
+vector<Light*> lights;
 GLuint textureIds[10000];
 const double pi = acos(-1);
 double radToDeg(double a) { return(a * 180 / pi); }
@@ -44,12 +46,36 @@ void passiveMotionHandler(int x, int y) {
   glutWarpPointer(screenWidthDiv2, screenHeightDiv2);
 }
 
+bool loading = false;
+void loadLights() {
+  if (!loading && keyboard['3']) loading = true;
+  else return;
+  for (int i = 0; i < 8; i ++) glDisable(GL_LIGHT0 + i);
+  lights.clear();
+  GLfloat position[4], direction[4], ambient[4], diffuse[4], specular[4], lightSpotCutoff;
+  FILE *filePtr = fopen("lights", "rb+");
+  while (fscanf(filePtr, "[^\n]") != EOF &&
+      fscanf(filePtr, "%f %f %f\n%f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f",
+      &position[0], &position[1], &position[2],
+      &direction[0], &direction[1], &direction[2],
+      &ambient[0], &ambient[1], &ambient[2], &ambient[3],
+      &diffuse[0], &diffuse[1], &diffuse[2], &diffuse[3],
+      &specular[0], &specular[1], &specular[2], &specular[3],
+      &lightSpotCutoff) != EOF) {
+    position[3] = 1;
+    lights.push_back(new Light(GL_LIGHT0 + (GLenum) lights.size() + 1, position, direction, ambient, diffuse, specular, lightSpotCutoff));
+    glEnable(lights[lights.size() - 1]->id);
+  }
+  loading = false;
+}
+
 void update(int value) {
   glutTimerFunc(10, update, 1);
   camera->getMovements(keyboard, mouse);
   camera->update();
   door->update();
   scene->getMovements(keyboard);
+  loadLights();
   glutPostRedisplay();
 }
 
@@ -82,29 +108,7 @@ void drawCursorBall() {
 }
 
 void lightsSetup() {
-  GLfloat materialAmbientAndDiffuse[] = {1, 1, 1, 1};
-  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, materialAmbientAndDiffuse); // Defines objects reflection to ambient and diffuse light
-  GLfloat materialSpecular[] = {1, 1, 1, 1};
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, materialSpecular); // Defines objects reflection to specular light
-  glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128); // Defines objects level of reflection (0 to 128)
-
-  GLfloat lightAmbient0[] = {0.2, 0.2, 0.2, 1}; glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient0);
-  GLfloat lightDiffuse0[] = {0.8, 0.8, 0.8, 1}; glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse0);
-  GLfloat lightSpecular0[] = {1, 1, 1, 0.5}; glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular0);
-  GLfloat lightSpotCutoff0 = 40 + mouse->z; glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, lightSpotCutoff0);
-  // glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, 1);
-  GLfloat lightPosition[] = {(GLfloat) camera->position->x, (GLfloat) camera->position->y + 1, (GLfloat) camera->position->z, 1};
-  glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-  GLfloat lightSpotDirection[] = {(GLfloat) camera->eyeDirection->x, (GLfloat) camera->eyeDirection->y, (GLfloat) camera->eyeDirection->z};
-  glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightSpotDirection);
-
-  GLfloat lightAmbient1[] = {0, 0, 0, 0}; glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmbient1);
-  GLfloat lightDiffuse1[] = {0, 0, 0, 0}; glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDiffuse1);
-  GLfloat lightSpecular1[] = {1, 1, 1, 1}; glLightfv(GL_LIGHT1, GL_SPECULAR, lightSpecular1);
-  GLfloat lightSpotCutoff1 = 20 + mouse->z; glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, lightSpotCutoff1);
-  // glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 1);
-  glLightfv(GL_LIGHT1, GL_POSITION, lightPosition);
-  glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, lightSpotDirection);
+  for (Light *l: lights) l->setup();
 }
 
 void display() {
@@ -172,12 +176,18 @@ void init() {
 
   LIGHTS {
     glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0); //glEnable(GL_LIGHT1);
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
     glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
     glShadeModel(GL_SMOOTH);
+
+    GLfloat materialAmbientAndDiffuse[] = {1, 1, 1, 1};
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, materialAmbientAndDiffuse); // Defines objects reflection to ambient and diffuse light
+    GLfloat materialSpecular[] = {1, 1, 1, 1};
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, materialSpecular); // Defines objects reflection to specular light
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128); // Defines objects level of reflection (0 to 128)
   }
+  loadLights();
 
   textureIds[0] = loadTexture("Textures/wall.bmp", 1024, 1024);
   textureIds[1] = loadTexture("Textures/window.bmp", 343, 343);

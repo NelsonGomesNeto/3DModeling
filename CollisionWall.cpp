@@ -33,7 +33,6 @@ void Wall::buildWalls() {
     else fseek(filePtr, -1, SEEK_CUR);
     double x, y, z, xAngle, yAngle, width, height; int R, G, B, A, textureId;
     fscanf(filePtr, "%lf %lf %lf %lf %lf %lf %lf %d %d %d %d %d\n", &x, &y, &z, &xAngle, &yAngle, &width, &height, &R, &G, &B, &A, &textureId);
-    printf("%lf %lf %lf\n", x, y, z);
     Vector *w = new Vector(1, 0, 0), *h = new Vector(0, 1, 0), *p = new Vector(x, y, z);
     double pi = 3.141592653589793;
     if ((fabs(xAngle) > 10 && fabs(xAngle) < 170) || (fabs(xAngle) > 190 && fabs(xAngle) < 350)) continue;
