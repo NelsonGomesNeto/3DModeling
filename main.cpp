@@ -52,18 +52,19 @@ void loadLights() {
   else return;
   for (int i = 0; i < 8; i ++) glDisable(GL_LIGHT0 + i);
   lights.clear();
-  GLfloat position[4], direction[4], ambient[4], diffuse[4], specular[4], lightSpotCutoff;
+  char trash[1000];
+  GLfloat position[4], direction[4], ambient[4], diffuse[4], specular[4], spotExponent, spotCutoff, constantAttenuation, linearAttenuation, quadraticAttenuation;
   FILE *filePtr = fopen("lights", "rb+");
-  while (fscanf(filePtr, "[^\n]") != EOF &&
-      fscanf(filePtr, "%f %f %f\n%f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f",
+  while (fscanf(filePtr, "%[^\n]", trash) != EOF &&
+      fscanf(filePtr, "%f %f %f\n%f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f %f\n",
       &position[0], &position[1], &position[2],
       &direction[0], &direction[1], &direction[2],
       &ambient[0], &ambient[1], &ambient[2], &ambient[3],
       &diffuse[0], &diffuse[1], &diffuse[2], &diffuse[3],
       &specular[0], &specular[1], &specular[2], &specular[3],
-      &lightSpotCutoff) != EOF) {
+      &spotExponent, &spotCutoff, &constantAttenuation, &linearAttenuation, &quadraticAttenuation) != EOF) {
     position[3] = 1;
-    lights.push_back(new Light(GL_LIGHT0 + (GLenum) lights.size() + 1, position, direction, ambient, diffuse, specular, lightSpotCutoff));
+    lights.push_back(new Light(GL_LIGHT0 + (GLenum) lights.size() + 1, position, direction, ambient, diffuse, specular, spotExponent, spotCutoff, constantAttenuation, linearAttenuation, quadraticAttenuation));
     glEnable(lights[lights.size() - 1]->id);
   }
   loading = false;
@@ -115,8 +116,8 @@ void display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glPushMatrix();
-    gluLookAt(camera->position->x, camera->position->y + 1, camera->position->z,
-              camera->position->x + camera->eyeDirection->x*100, camera->position->y + 1 + camera->eyeDirection->y*100, camera->position->z + camera->eyeDirection->z*100,
+    gluLookAt(camera->position->x, camera->position->y + 1.5, camera->position->z,
+              camera->position->x + camera->eyeDirection->x*100, camera->position->y + 1.5 + camera->eyeDirection->y*100, camera->position->z + camera->eyeDirection->z*100,
               0, 1, 0);
     LIGHTS lightsSetup();
 
