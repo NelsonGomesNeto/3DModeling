@@ -28,6 +28,7 @@ Wall* walls;
 Scene *scene;
 Doorr* door;
 vector<Light*> lights;
+GLUquadric *quadric = gluNewQuadric();
 GLuint textureIds[10000];
 const double pi = acos(-1);
 double radToDeg(double a) { return(a * 180 / pi); }
@@ -131,29 +132,29 @@ void display() {
 
     scene->draw(camera->position, textureIds);
     door->draw();
-    for (Light *l: lights) l->draw();
+    for (Light *l: lights) l->draw(quadric);
 
     glDisable(GL_TEXTURE_2D);
     glColor4ub(176, 163, 119, 255);
     glPushMatrix();
       glTranslated(-5, 4, -3.7);
       glRotated(-90, 1, 0, 0);
-      gluCylinder(gluNewQuadric(), 0.5, 0.5, 10, 10, 50);
+      glutSolidCylinder(0.5, 10, 10, 50);
     glPopMatrix();
     glPushMatrix();
       glTranslated(-5, 4, -6.2);
       glRotated(-90, 1, 0, 0);
-      gluCylinder(gluNewQuadric(), 0.5, 0.5, 10, 10, 50);
+      glutSolidCylinder(0.5, 10, 10, 50);
     glPopMatrix();
     glPushMatrix();
       glTranslated(-5, 4, 3.7);
       glRotated(-90, 1, 0, 0);
-      gluCylinder(gluNewQuadric(), 0.5, 0.5, 10, 10, 50);
+      glutSolidCylinder(0.5, 10, 10, 50);
     glPopMatrix();
     glPushMatrix();
       glTranslated(-5, 4, 6.2);
       glRotated(-90, 1, 0, 0);
-      gluCylinder(gluNewQuadric(), 0.5, 0.5, 10, 10, 50);
+      glutSolidCylinder(0.5, 10, 10, 50);
     glPopMatrix();
     glEnable(GL_TEXTURE_2D);
   glPopMatrix();

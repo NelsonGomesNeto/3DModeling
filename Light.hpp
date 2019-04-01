@@ -11,7 +11,7 @@ public:
   GLenum id;
   Light(GLenum id, GLfloat position[], GLfloat direction[], GLfloat ambient[], GLfloat diffuse[], GLfloat specular[], GLfloat spotExponent, GLfloat spotCutoff, GLfloat constantAttenuation, GLfloat linearAttenuation, GLfloat quadraticAttenuation);
   void setup();
-  void draw();
+  void draw(GLUquadric *quadric);
 };
 
 #endif
