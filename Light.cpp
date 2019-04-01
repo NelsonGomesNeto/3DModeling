@@ -1,5 +1,6 @@
 #include "Light.hpp"
 #include <stdio.h>
+#include <GL/freeglut.h>
 
 Light::Light(GLenum id, GLfloat position[], GLfloat direction[], GLfloat ambient[], GLfloat diffuse[], GLfloat specular[], GLfloat spotExponent, GLfloat spotCutoff, GLfloat constantAttenuation, GLfloat linearAttenuation, GLfloat quadraticAttenuation) {
   this->id = id;
@@ -26,5 +27,14 @@ void Light::setup() {
   glLightf(this->id, GL_CONSTANT_ATTENUATION, this->constantAttenuation);
   glLightf(this->id, GL_LINEAR_ATTENUATION, this->linearAttenuation);
   glLightf(this->id, GL_QUADRATIC_ATTENUATION, this->quadraticAttenuation);
+}
+
+void Light::draw() {
+  glDisable(GL_TEXTURE_2D);
+  glPushMatrix();
+    glTranslatef(this->position[0], this->position[1], this->position[2]);
+    glColor3ub(255, 255, 255); glutSolidSphere(0.1, 10, 10);
+  glPopMatrix();
+  glEnable(GL_TEXTURE_2D);
 }
 

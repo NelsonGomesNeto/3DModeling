@@ -131,6 +131,7 @@ void display() {
 
     scene->draw(camera->position, textureIds);
     door->draw();
+    for (Light *l: lights) l->draw();
 
     glDisable(GL_TEXTURE_2D);
     glColor4ub(176, 163, 119, 255);
