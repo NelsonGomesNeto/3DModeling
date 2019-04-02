@@ -114,7 +114,7 @@ void lightsSetup() {
   direction[4] = {(GLfloat) (camera->eyeDirection->x), (GLfloat) (camera->eyeDirection->y), (GLfloat) (camera->eyeDirection->z), 1},
   ambient[4] = {0.2, 0.2, 0.2, 1},
   diffuse[4] = {0.01, 0.01, 0.01, 1},
-  specular[4] = {0.2, 0.2, 0.2, 1},
+  specular[4] = {0, 0, 0, 1},
   spotExponent = 50,
   spotCutoff = 40,
   constantAttenuation = 0.2,
@@ -130,6 +130,18 @@ void lightsSetup() {
   glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, constantAttenuation);
   glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, linearAttenuation);
   glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, quadraticAttenuation);
+
+  GLfloat all0[4] = {0, 0, 0, 0}, specular2[4] = {0.5, 0.5, 0.5, 1};
+  glLightfv(GL_LIGHT7, GL_POSITION, position);
+//  glLightfv(GL_LIGHT7, GL_SPOT_DIRECTION, direction);
+  glLightfv(GL_LIGHT7, GL_AMBIENT, all0);
+  glLightfv(GL_LIGHT7, GL_DIFFUSE, all0);
+  glLightfv(GL_LIGHT7, GL_SPECULAR, specular2);
+  glLightf(GL_LIGHT7, GL_SPOT_EXPONENT, 1);
+  glLightf(GL_LIGHT7, GL_SPOT_CUTOFF, 180);
+  glLightf(GL_LIGHT7, GL_CONSTANT_ATTENUATION, constantAttenuation);
+  glLightf(GL_LIGHT7, GL_LINEAR_ATTENUATION, linearAttenuation);
+  glLightf(GL_LIGHT7, GL_QUADRATIC_ATTENUATION, quadraticAttenuation);
   for (Light *l: lights) l->setup();
 }
 
@@ -199,6 +211,7 @@ void init() {
 
   LIGHTS {
     glEnable(GL_LIGHT0);
+    //glEnable(GL_LIGHT7);
     glEnable(GL_LIGHTING);
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);

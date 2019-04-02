@@ -37,7 +37,7 @@ void Triangle::draw(GLuint* textureIds) {
   glColor4ub(this->R, this->G, this->B, this->A);
   Vector *a = *this->vertices[1] - *this->vertices[0], *b = *this->vertices[2] - *this->vertices[1];
   double triangleArea = sqrt((a->y*b->z - a->z*b->y)*(a->y*b->z - a->z*b->y) + (a->z*b->x - a->x*b->z)*(a->z*b->x - a->x*b->z) + (a->x*b->y - a->y*b->x)*(a->x*b->y - a->y*b->x)) / 2.0;
-  int maxDepth = log2(triangleArea) + 4;
+  int maxDepth = log2(triangleArea) + 2; // was 4
   maxDepth = -1 > maxDepth ? 2 : maxDepth;
   glBegin(GL_TRIANGLES);
     double ab = (*this->vertices[1] - *this->vertices[0])->dot(*this->vertices[1] - *this->vertices[0]), bc = (*this->vertices[2] - *this->vertices[1])->dot(*this->vertices[2] - *this->vertices[1]), ca = (*this->vertices[0] - *this->vertices[2])->dot(*this->vertices[0] - *this->vertices[2]);

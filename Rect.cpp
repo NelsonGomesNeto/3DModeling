@@ -43,7 +43,7 @@ void Rect::draw(GLuint* textureIds) {
     glTranslated(this->position->x, this->position->y, this->position->z);
     glRotated(this->yAngle, 0, 1, 0);
     glRotated(this->xAngle, 1, 0, 0);
-    double mult = 5;
+    double mult = 2; // was 5
     double wPieces = ceil(this->width * mult), hPieces = ceil(this->height * mult);
     double w = this->width / wPieces, bw = -this->width / 2.0, h = this->height / hPieces, bh = -this->height / 2.0;
     double ph = 1 / hPieces, pw = 1 / wPieces;
