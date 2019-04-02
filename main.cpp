@@ -110,6 +110,26 @@ void drawCursorBall() {
 }
 
 void lightsSetup() {
+  GLfloat position[4] = {(GLfloat) camera->position->x, (GLfloat) (camera->position->y + 1.5), (GLfloat) camera->position->z, 1},
+  direction[4] = {(GLfloat) (camera->eyeDirection->x), (GLfloat) (camera->eyeDirection->y), (GLfloat) (camera->eyeDirection->z), 1},
+  ambient[4] = {0.2, 0.2, 0.2, 1},
+  diffuse[4] = {0.01, 0.01, 0.01, 1},
+  specular[4] = {0.2, 0.2, 0.2, 1},
+  spotExponent = 50,
+  spotCutoff = 40,
+  constantAttenuation = 0.2,
+  linearAttenuation = 0,
+  quadraticAttenuation = 0;
+  glLightfv(GL_LIGHT0, GL_POSITION, position);
+  glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, direction);
+  glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+  glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
+  glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, spotExponent);
+  glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, spotCutoff);
+  glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, constantAttenuation);
+  glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, linearAttenuation);
+  glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, quadraticAttenuation);
   for (Light *l: lights) l->setup();
 }
 
@@ -178,6 +198,7 @@ void init() {
   glEnable(GL_DEPTH_TEST);
 
   LIGHTS {
+    glEnable(GL_LIGHT0);
     glEnable(GL_LIGHTING);
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);

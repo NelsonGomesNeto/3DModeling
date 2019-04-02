@@ -4,6 +4,7 @@
 
 Light::Light(GLenum id, GLfloat position[], GLfloat direction[], GLfloat ambient[], GLfloat diffuse[], GLfloat specular[], GLfloat spotExponent, GLfloat spotCutoff, GLfloat constantAttenuation, GLfloat linearAttenuation, GLfloat quadraticAttenuation) {
   this->id = id;
+  position[3] = direction[3] = 1;
   memcpy(this->position, position, sizeof(GLenum)*4);
   memcpy(this->direction, direction, sizeof(GLenum)*4);
   memcpy(this->ambient, ambient, sizeof(GLenum)*4);
