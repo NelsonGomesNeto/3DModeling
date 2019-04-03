@@ -65,7 +65,7 @@ void loadLights() {
       &specular[0], &specular[1], &specular[2], &specular[3],
       &spotExponent, &spotCutoff, &constantAttenuation, &linearAttenuation, &quadraticAttenuation) != EOF) {
     position[3] = 1;
-    lights.push_back(new Light(GL_LIGHT0 + (GLenum) lights.size() + 1, position, direction, ambient, diffuse, specular, spotExponent, spotCutoff, constantAttenuation, linearAttenuation, quadraticAttenuation));
+    lights.push_back(new Light(GL_LIGHT0 + (GLenum) lights.size(), position, direction, ambient, diffuse, specular, spotExponent, spotCutoff, constantAttenuation, linearAttenuation, quadraticAttenuation));
     glEnable(lights[lights.size() - 1]->id);
   }
   loading = false;
@@ -110,39 +110,11 @@ void drawCursorBall() {
 }
 
 void lightsSetup() {
+  for (Light *l: lights) l->setup();
   GLfloat position[4] = {(GLfloat) camera->position->x, (GLfloat) (camera->position->y + 1.5), (GLfloat) camera->position->z, 1},
-  direction[4] = {(GLfloat) (camera->eyeDirection->x), (GLfloat) (camera->eyeDirection->y), (GLfloat) (camera->eyeDirection->z), 1},
-  ambient[4] = {0.2, 0.2, 0.2, 1},
-  diffuse[4] = {0.01, 0.01, 0.01, 1},
-  specular[4] = {0, 0, 0, 1},
-  spotExponent = 50,
-  spotCutoff = 40,
-  constantAttenuation = 0.2,
-  linearAttenuation = 0,
-  quadraticAttenuation = 0;
+  direction[4] = {(GLfloat) (camera->eyeDirection->x), (GLfloat) (camera->eyeDirection->y), (GLfloat) (camera->eyeDirection->z), 1};
   glLightfv(GL_LIGHT0, GL_POSITION, position);
   glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, direction);
-  glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-  glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
-  glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, spotExponent);
-  glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, spotCutoff);
-  glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, constantAttenuation);
-  glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, linearAttenuation);
-  glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, quadraticAttenuation);
-
-  GLfloat all0[4] = {0, 0, 0, 0}, specular2[4] = {0.5, 0.5, 0.5, 1};
-  glLightfv(GL_LIGHT7, GL_POSITION, position);
-//  glLightfv(GL_LIGHT7, GL_SPOT_DIRECTION, direction);
-  glLightfv(GL_LIGHT7, GL_AMBIENT, all0);
-  glLightfv(GL_LIGHT7, GL_DIFFUSE, all0);
-  glLightfv(GL_LIGHT7, GL_SPECULAR, specular2);
-  glLightf(GL_LIGHT7, GL_SPOT_EXPONENT, 1);
-  glLightf(GL_LIGHT7, GL_SPOT_CUTOFF, 180);
-  glLightf(GL_LIGHT7, GL_CONSTANT_ATTENUATION, constantAttenuation);
-  glLightf(GL_LIGHT7, GL_LINEAR_ATTENUATION, linearAttenuation);
-  glLightf(GL_LIGHT7, GL_QUADRATIC_ATTENUATION, quadraticAttenuation);
-  for (Light *l: lights) l->setup();
 }
 
 void display() {
@@ -210,8 +182,6 @@ void init() {
   glEnable(GL_DEPTH_TEST);
 
   LIGHTS {
-    glEnable(GL_LIGHT0);
-    //glEnable(GL_LIGHT7);
     glEnable(GL_LIGHTING);
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);

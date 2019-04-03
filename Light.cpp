@@ -36,7 +36,7 @@ void Light::draw(GLUquadric *quadric) {
     glTranslatef(this->position[0], this->position[1], this->position[2]);
     glRotated(90, 1, 0, 0);
     glColor3ub(255, 255, 255); glutSolidSphere(0.1, 10, 10);
-    glColor4ub(255, 255, 255, 100); gluCylinder(quadric, 0, 3, 7, 10, 50);
+    glColor4ub(255, 255, 255, 130); gluCylinder(quadric, 0, 3, 7, 10, 50);
   glPopMatrix();
   glEnable(GL_TEXTURE_2D);
 }
